@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from src.database.database import SessionLocal, engine, Base
 from sqlalchemy import create_engine
@@ -10,7 +11,9 @@ from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm
 
 # Criando o aplicativo Flask
-app = Flask(__name__)
+app = Flask(__name__,
+            template_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'templates'),
+            static_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static'))
 
 # Criando as tabelas no banco de dados, caso ainda não existam
 Base.metadata.create_all(bind=engine)
