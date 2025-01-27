@@ -4,9 +4,10 @@ from src.database.database import SessionLocal, engine, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.models.models import Loja
-from src.specialists.LojaA import LojaA
-from src.specialists.LojaB import LojaB
-from src.specialists.LojaC import LojaC
+# from src.specialists.LojaA import LojaA
+# from src.specialists.LojaB import LojaB
+# from src.specialists.LojaC import LojaC
+from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm
 
@@ -19,7 +20,8 @@ app = Flask(__name__,
 Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
-# Create Blackboard
+
+# Criando o blackboard ao iniciar o backend
 blackboard = Blackboard(db)
 
 @app.get("/")
@@ -40,10 +42,6 @@ def listar_lojas():
         endereco = form.endereco.data
         telefone = form.telefone.data
 
-        # print('Nome Loja: ',nome_loja)
-        # print('Endereço: ',endereco)
-        # print('Telefone: ',telefone)
-
         # Usando a instância global do Blackboard para adicionar a loja
         blackboard.adicionar_loja(nome_loja, endereco, telefone)
 
@@ -54,9 +52,10 @@ def listar_lojas():
 # Rota para ver o estoque das lojas
 @app.route('/ver_estoque_lojas', methods=['GET'])
 def ver_estoque_lojas():
-    loja_a = LojaA(blackboard)
-    loja_b = LojaB(blackboard)
-    loja_c = LojaC(blackboard)
+
+    loja_a = LojaFactory('LojaA', blackboard)
+    loja_b = LojaFactory('LojaB', blackboard)
+    loja_c = LojaFactory('LojaC', blackboard)
 
     print("Loja A:")
     loja_a.verificar_estoque()

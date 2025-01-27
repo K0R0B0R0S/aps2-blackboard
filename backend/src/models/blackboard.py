@@ -2,8 +2,25 @@ from sqlalchemy.orm import Session
 from src.models.models import Loja, Produto, Estoque, Venda, Compra, ItemCompra, ItemVenda
 
 class Blackboard:
-    def __init__(self, db_session: Session):
-        self.db = db_session
+    _instance = None
+
+    def __new__(cls, db_session=None):
+        """Método para garantir que só haverá uma instância de Blackboard (implementação do SINGLETON).
+        
+        Esse método é responsável por garantir que apenas uma instância da classe Blackboard seja criada. 
+        Se já existe uma instância, ele simplesmente retorna essa instância. 
+        Caso contrário, ele cria uma nova instância e a armazena no atributo estático _instance.
+        
+        """
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)  # Cria a instância
+            cls._instance.db_session = db_session  # Inicializa a sessão de banco de dados
+        return cls._instance  # Retorna a instância única
+
+    def __init__(self, db_session=None):
+        """Inicia a instância do Blackboard com uma sessão de banco de dados, se necessário."""
+        if db_session is not None:
+            self.db = db_session
 
     # CRUD para Loja
     def adicionar_loja(self, nome_loja: str, endereco: str, telefone: str):
