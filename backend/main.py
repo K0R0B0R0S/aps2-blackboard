@@ -28,6 +28,11 @@ blackboard = Blackboard(db)
 def read_root():
     return {"message": "Bem-vindo ao sistema!"}
 
+
+@app.get("/teste")
+def read_root_TEST():
+    return render_template('index.html')
+
 # Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])
 def listar_lojas():
