@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+</head>
+
+
+<body>
+    <h1>Controle de Estoque - Lojas de Varejo</h1>
+
+    <!-- Tabela para exibir as lojas e seus produtos -->
+    <h2>Lista de Lojas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Loja</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loja in lojas %}
+            <tr>
+                <td>{{ loja.nome_loja }}</td>
+                <td>{{ loja.endereco }}</td>
+                <td>{{ loja.telefone }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Formulário para adicionar uma nova loja -->
+    <h2>Adicionar Nova Loja</h2>
+
+    {% include '_messages.html' %}
+    {% from "_formularioajuda.html" import render_field %}
+
+    <form method="post" enctype="multipart/form-data">
+        
+        {{ render_field(form.nome_loja, class="form-control") }}
+        {{ render_field(form.endereco, class="form-control", id="numero_processo_input") }}
+        {{ render_field(form.telefone, class="form-control custom-select") }}
+
+        <input type="submit" id="addLoja" value="Adicionar Loja"></input>
+    </form>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

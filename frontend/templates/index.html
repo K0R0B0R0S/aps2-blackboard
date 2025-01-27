@@ -37,56 +37,20 @@
                     <span class="material-icons-sharp">
                         person_outline
                     </span>
-                    <h3>Users</h3>
+                    <h3>Cadastros</h3>
                 </a>
                 <a href="#">
                     <span class="material-icons-sharp">
                         receipt_long
                     </span>
-                    <h3>History</h3>
-                </a>
-                <a href="#" class="active">
-                    <span class="material-icons-sharp">
-                        insights
-                    </span>
-                    <h3>Analytics</h3>
+                    <h3>Histórico</h3>
                 </a>
                 <a href="#">
-                    <span class="material-icons-sharp">
-                        mail_outline
-                    </span>
-                    <h3>Tickets</h3>
-                    <span class="message-count">27</span>
-                </a>
-                <a href="#">
-                    <span class="material-icons-sharp">
-                        inventory
-                    </span>
-                    <h3>Sale List</h3>
-                </a>
-                <a href="#">
-                    <span class="material-icons-sharp">
-                        report_gmailerrorred
-                    </span>
-                    <h3>Reports</h3>
-                </a>
-                <a href="#">
-                    <span class="material-icons-sharp">
-                        settings
-                    </span>
-                    <h3>Settings</h3>
-                </a>
-                <a href="#">
-                    <span class="material-icons-sharp">
-                        add
-                    </span>
-                    <h3>New Login</h3>
-                </a>
-                <a href="#">
-                    <span class="material-icons-sharp">
+                    <!-- <span class="material-icons-sharp">
                         logout
                     </span>
-                    <h3>Logout</h3>
+                    <h3>Logout</h3> -->
+                    
                 </a>
             </div>
         </aside>
@@ -94,9 +58,9 @@
 
         <!-- Main Content -->
         <main>
-            <h1>Analytics</h1>
+            <h1>Página Inicial</h1>
             <!-- Analyses -->
-            <div class="analyse">
+            <!-- <div class="analyse">
                 <div class="sales">
                     <div class="status">
                         <div class="info">
@@ -145,32 +109,27 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- End of Analyses -->
 
             <!-- New Users Section -->
             <div class="new-users">
-                <h2>New Users</h2>
+                <h2>Lojas</h2>
                 <div class="user-list">
                     <div class="user">
                         <img src="images/profile-2.jpg">
-                        <h2>Jack</h2>
-                        <p>54 Min Ago</p>
+                        <h2>Loja A</h2>
+                        <!-- <p>54 Min Ago</p> -->
                     </div>
                     <div class="user">
-                        <img src="images/profile-3.jpg">
-                        <h2>Amir</h2>
-                        <p>3 Hours Ago</p>
+                        <img src="images/profile-2.jpg">
+                        <h2>Loja B</h2>
+                        <!-- <p>54 Min Ago</p> -->
                     </div>
                     <div class="user">
-                        <img src="images/profile-4.jpg">
-                        <h2>Ember</h2>
-                        <p>6 Hours Ago</p>
-                    </div>
-                    <div class="user">
-                        <img src="images/plus.png">
-                        <h2>More</h2>
-                        <p>New User</p>
+                        <img src="images/profile-2.jpg">
+                        <h2>Loja C</h2>
+                        <!-- <p>54 Min Ago</p> -->
                     </div>
                 </div>
             </div>
@@ -178,18 +137,24 @@
 
             <!-- Recent Orders Table -->
             <div class="recent-orders">
-                <h2>Recent Orders</h2>
-                <table>
+                <h2>Vendas recentes</h2>
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>Course Name</th>
-                            <th>Course Number</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                            <th></th>
+                            <th>Loja</th>
+                            <th>Endereço</th>
+                            <th>Telefone</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        {% for loja in lojas %}
+                        <tr>
+                            <td>{{ loja.nome_loja }}</td>
+                            <td>{{ loja.endereco }}</td>
+                            <td>{{ loja.telefone }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 <a href="#">Show All</a>
             </div>
@@ -217,24 +182,24 @@
 
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>Reza</b></p>
+                        <p>Olá, <b>Fulano</b></p>
                         <small class="text-muted">Admin</small>
                     </div>
-                    <div class="profile-photo">
+                    <!-- <div class="profile-photo">
                         <img src="images/profile-1.jpg">
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
             <!-- End of Nav -->
 
-            <div class="user-profile">
+            <!-- <div class="user-profile">
                 <div class="logo">
                     <img src="images/logo.png">
                     <h2>AsmrProg</h2>
                     <p>Fullstack Web Developer</p>
                 </div>
-            </div>
+            </div> -->
 
             <div class="reminders">
                 <div class="header">
