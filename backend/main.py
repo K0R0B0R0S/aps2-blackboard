@@ -29,9 +29,13 @@ def read_root():
     return {"message": "Bem-vindo ao sistema!"}
 
 
-@app.get("/teste")
+@app.get("/home")
 def read_root_TEST():
     return render_template('index.html')
+
+# @app.get("/controle_estoque")
+# def read_root_estoque():
+#     return render_template('controle_estoque.html', form=form, loja=loja)
 
 # Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])
