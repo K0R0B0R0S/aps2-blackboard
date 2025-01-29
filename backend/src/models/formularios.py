@@ -1,8 +1,7 @@
 import re
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField, TextAreaField, DecimalField, SelectField, DateField
-from wtforms import StringField, IntegerField, HiddenField, validators
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField, TextAreaField, DecimalField, SelectField, DateField, FloatField
 from flask import session
-from wtforms.validators import DataRequired, Length, Optional, Regexp
+from wtforms.validators import DataRequired, Length, Optional, Regexp, NumberRange
 from wtforms import ValidationError
 from datetime import datetime
 
@@ -12,11 +11,11 @@ class LojaForm(Form):
     telefone = StringField('*Telefone', validators=[DataRequired(), Length(max=15)])
 
 class ProdutoForm(Form):
-    nome_produto = StringField('*Nome do Produto', validators=[DataRequired(), Length(max=100)])
-    descricao = TextAreaField('Descrição', validators=[Optional(), Length(max=255)])
-    preco_unitario = DecimalField('*Preço Unitário', validators=[DataRequired()])
-    estoque_minimo = IntegerField('*Estoque Mínimo', validators=[DataRequired()])
-
+    nome_produto = StringField('Nome do Produto', validators=[DataRequired()])
+    descricao = TextAreaField('Descrição', validators=[DataRequired()])
+    preco_unitario = DecimalField('Preço Unitário', validators=[DataRequired(), NumberRange(min=0)])
+    estoque_minimo = IntegerField('Estoque Mínimo', validators=[DataRequired(), NumberRange(min=0)])
+    
 class EstoqueForm(Form):
     id_loja = IntegerField('*ID Loja', validators=[DataRequired()])
     id_produto = IntegerField('*ID Produto', validators=[DataRequired()])

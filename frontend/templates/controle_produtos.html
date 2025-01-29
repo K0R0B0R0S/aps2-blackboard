@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Produtos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_cntrl_produtos.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Controle de Produtos - Lojas de Varejo</h1>
+        </header>
+
+        <!-- Tabela para exibir os produtos -->
+        <section class="produtos-section">
+            <h2>Lista de Produtos</h2>
+            <table class="produtos-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário</th>
+                        <th>Estoque Mínimo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                    <tr>
+                        <td>{{ produto.nome_produto }}</td>
+                        <td>{{ produto.descricao }}</td>
+                        <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
+                        <td>{{ produto.estoque_minimo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Formulário para adicionar um novo produto -->
+        <section class="form-section">
+            <h2>Adicionar Novo Produto</h2>
+
+            {% include '_messages.html' %}
+            {% from "_formularioajuda.html" import render_field %}
+
+            <form method="post" enctype="multipart/form-data" class="produto-form">
+                {{ render_field(form.nome_produto, class="form-control", placeholder="Nome do Produto") }}
+                {{ render_field(form.descricao, class="form-control", placeholder="Descrição do Produto") }}
+                {{ render_field(form.preco_unitario, class="form-control", placeholder="Preço Unitário") }}
+                {{ render_field(form.estoque_minimo, class="form-control", placeholder="Estoque Mínimo") }}
+
+                <button type="submit" id="addProduto" class="btn-primary">Adicionar Produto</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

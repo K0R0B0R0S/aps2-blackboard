@@ -9,7 +9,7 @@ from src.models.models import Loja
 # from src.specialists.LojaC import LojaC
 from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
-from src.models.formularios import LojaForm
+from src.models.formularios import LojaForm, ProdutoForm
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
@@ -34,6 +34,24 @@ def read_root_TEST():
     lojas = blackboard.listar_lojas()
 
     return render_template('index.html', lojas=lojas)
+
+@app.route('/produtos', methods=['GET', 'POST'])
+def listar_produtos():
+    produtos = blackboard.listar_produtos()  # Busca a lista de produtos
+    form = ProdutoForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        nome_produto = form.nome_produto.data
+        descricao = form.descricao.data
+        preco_unitario = form.preco_unitario.data
+        estoque_minimo = form.estoque_minimo.data
+
+        # Adiciona o produto ao Blackboard
+        blackboard.adicionar_produto(nome_produto, descricao, preco_unitario, estoque_minimo)
+
+        return redirect(url_for('listar_produtos'))
+
+    return render_template('controle_produtos.html', produtos=produtos, form=form)
 
 # Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])

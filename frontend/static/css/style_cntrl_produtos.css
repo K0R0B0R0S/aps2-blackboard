@@ -1,0 +1,131 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+/* Estilo da tabela */
+.produtos-section {
+    margin-bottom: 40px;
+}
+
+.produtos-section h2 {
+    font-size: 1.8em;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.produtos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.produtos-table th,
+.produtos-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.produtos-table th {
+    background-color: #34495e;
+    color: #fff;
+    font-weight: 500;
+}
+
+.produtos-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilo do formulário */
+.form-section {
+    margin-bottom: 40px;
+}
+
+.form-section h2 {
+    font-size: 1.8em;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.produto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Mensagens de erro/sucesso */
+.messages {
+    margin-bottom: 20px;
+}
+
+.messages .success {
+    color: #27ae60;
+    background-color: #d5f5e3;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.messages .error {
+    color: #e74c3c;
+    background-color: #fadbd8;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
