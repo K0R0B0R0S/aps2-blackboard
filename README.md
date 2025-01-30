@@ -42,7 +42,7 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
 
    ```bash
    git clone https://github.com/seu-usuario/aps2-blackboard.git
-   cd aps2-blackboard/backend
+   cd aps2-blackboard
    ```
 
 2. **Crie um Ambiente Virtual (Opcional, mas Recomendado)**
@@ -72,18 +72,16 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
     CONNECTION_URI=postgresql://postgres:root@localhost:5455/blackboard
     ```
 
-5. **Execute as Migrations**:
-    ```
+5. **Execute as Migrations e Insira Dados de Brinquedo**:
+    ```bash
+    cd ./backend #Caso não esteja na pasta
     alembic upgrade head
+    python -m src.database.seed
     ```
 
 6. **Execute o Projeto**:
-    ```
-    python -m backend.src.main
-    ```
-
-7. **Insira Dados de Brinquedo**:
-    ```
-    python -m backend.src.database.seed
+    ```bash
+    cd ./backend #Caso não esteja na pasta
+    python main.py
     ```
 
