@@ -21,7 +21,7 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
 ## 🛠️ Tecnologias Utilizadas
 
 - **Linguagem de Programação:** Python
-- **Banco de Dados:** SQLite (ou outro SGBD de sua escolha, como PostgreSQL ou MySQL)
+- **Banco de Dados:** PostgreSQL
 - **ORM:** SQLAlchemy
 - **Ferramenta de Migração:** Alembic
 - **Arquitetura:** Blackboard
@@ -34,7 +34,7 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
 
 - Python 3.8 ou superior.
 - Pip (gerenciador de pacotes do Python).
-- Banco de dados configurado (SQLite, PostgreSQL, MySQL, etc.).
+- Banco de dados configurado PostgreSQL.
 
 ### Passos para Configuração
 
@@ -67,7 +67,7 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
     ```
 
 4. **Configure o Banco de Dados**:
-    - Crie um arquivo .env na raiz do projeto e adicione a URL de conexão do banco de dados. Por exemplo, para Postgres:
+    - Crie um arquivo .env na raiz do projeto e adicione a URL de conexão do banco de dados. Para Postgres:
     ```
     CONNECTION_URI=postgresql://postgres:root@localhost:5455/blackboard
     ```
@@ -80,5 +80,10 @@ Este projeto implementa um sistema de controle e abastecimento de estoque para l
 6. **Execute o Projeto**:
     ```
     python -m backend.src.main
+    ```
+
+7. **Insira Dados de Brinquedo**:
+    ```
+    python -m backend.src.database.seed
     ```
 
