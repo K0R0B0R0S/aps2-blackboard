@@ -30,51 +30,51 @@ header h1 {
 }
 
 /* Estilo da tabela */
-.produtos-section {
+.first-section {
     margin-bottom: 40px;
 }
 
-.produtos-section h2 {
+.first-section h2 {
     font-size: 1.8em;
     color: #34495e;
     margin-bottom: 15px;
 }
 
-.produtos-table {
+.table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-.produtos-table th,
-.produtos-table td {
+.table th,
+.table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-.produtos-table th {
+.table th {
     background-color: #34495e;
     color: #fff;
     font-weight: 500;
 }
 
-.produtos-table tbody tr:hover {
+.table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
 /* Estilo do formulário */
-.form-section {
+.sec-section {
     margin-bottom: 40px;
 }
 
-.form-section h2 {
+.sec-section h2 {
     font-size: 1.8em;
     color: #34495e;
     margin-bottom: 15px;
 }
 
-.produto-form {
+.btn-form {
     display: flex;
     flex-direction: column;
     gap: 15px;

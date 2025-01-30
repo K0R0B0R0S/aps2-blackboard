@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_cntrl_estoq.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_controles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -15,9 +15,9 @@
         </header>
 
         <!-- Tabela para exibir as lojas e seus produtos -->
-        <section class="lojas-section">
+        <section class="first-section">
             <h2>Lista de Lojas</h2>
-            <table class="lojas-table">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Loja</th>
@@ -38,13 +38,13 @@
         </section>
 
         <!-- Formulário para adicionar uma nova loja -->
-        <section class="form-section">
+        <section class="sec-section">
             <h2>Adicionar Nova Loja</h2>
 
             {% include '_messages.html' %}
             {% from "_formularioajuda.html" import render_field %}
 
-            <form method="post" enctype="multipart/form-data" class="loja-form">
+            <form method="post" enctype="multipart/form-data" class="btn-form">
                 {{ render_field(form.nome_loja, class="form-control", placeholder="Nome da Loja") }}
                 {{ render_field(form.endereco, class="form-control", placeholder="Endereço da Loja") }}
                 {{ render_field(form.telefone, class="form-control", placeholder="Telefone da Loja") }}

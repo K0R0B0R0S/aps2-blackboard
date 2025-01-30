@@ -9,7 +9,7 @@ from src.models.models import Loja
 # from src.specialists.LojaC import LojaC
 from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
-from src.models.formularios import LojaForm, ProdutoForm
+from src.models.formularios import LojaForm, ProdutoForm, VendaForm
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
@@ -53,6 +53,25 @@ def listar_produtos():
 
     return render_template('controle_produtos.html', produtos=produtos, form=form)
 
+
+@app.route('/vendas', methods=['GET', 'POST'])
+def listar_vendas():
+    vendas = blackboard.listar_vendas()  # Busca a lista de vendas
+    form = VendaForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        id_loja = form.id_loja.data
+        produto_id = form.produto_id.data
+        quantidade = form.quantidade.data
+        preco_unitario = form.preco_unitario.data
+
+        # Adiciona a venda ao Blackboard
+        blackboard.registrar_venda(id_loja, [(produto_id, quantidade, preco_unitario)])
+
+        return redirect(url_for('listar_vendas'))
+
+    return render_template('controle_vendas.html', vendas=vendas, form=form)
+
 # Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])
 def listar_lojas():
@@ -72,7 +91,7 @@ def listar_lojas():
 
         return redirect(url_for('listar_lojas'))
 
-    return render_template('controle_estoque.html', lojas=lojas, form=form)
+    return render_template('controle_lojas.html', lojas=lojas, form=form)
 
 # Rota para ver o estoque das lojas
 @app.route('/ver_estoque_lojas', methods=['GET'])
