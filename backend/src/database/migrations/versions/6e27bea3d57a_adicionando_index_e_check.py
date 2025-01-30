@@ -23,12 +23,41 @@ def upgrade() -> None:
     op.create_index('idx_estoque_produto', 'estoque', ['id_produto'], unique=False)
     op.create_index('idx_venda_loja', 'venda', ['id_loja'], unique=False)
 
+    # Criando a restrição CHECK para garantir que a quantidade seja maior ou igual a zero
     op.create_check_constraint(
         'chk_quantidade_positiva',
         'estoque',
         'quantidade >= 0'
     )
 
+    # Função para verificar o estoque antes de inserir item de venda
+    op.execute("""
+    CREATE OR REPLACE FUNCTION verifica_estoque_item_venda_func()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        -- Verifica se o estoque do produto é suficiente para a venda
+        IF (SELECT quantidade FROM estoque 
+            WHERE id_produto = NEW.id_produto 
+            AND id_loja = (SELECT id_loja FROM venda WHERE id_venda = NEW.id_venda)) < NEW.quantidade THEN
+            -- Se o estoque for insuficiente, gera um erro e cancela a venda
+            RAISE EXCEPTION 'Estoque insuficiente para o produto ID %', NEW.id_produto;
+        END IF;
+
+        -- Caso o estoque seja suficiente, a venda pode continuar
+        RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+    """)
+
+    # Criando a trigger para verificar o estoque antes de inserir item de venda
+    op.execute("""
+    CREATE TRIGGER verifica_estoque_item_venda
+    BEFORE INSERT ON item_venda
+    FOR EACH ROW
+    EXECUTE FUNCTION verifica_estoque_item_venda_func();
+    """)
+
+    # Função para atualizar o estoque após a inserção de um item de venda
     op.execute("""
     CREATE OR REPLACE FUNCTION atualiza_estoque_venda_func()
     RETURNS TRIGGER AS $$
@@ -42,6 +71,7 @@ def upgrade() -> None:
     $$ LANGUAGE plpgsql;
     """)
 
+    # Criando a trigger para atualizar o estoque após a inserção de um item de venda
     op.execute("""
     CREATE TRIGGER atualiza_estoque_venda
     AFTER INSERT ON item_venda
@@ -58,13 +88,23 @@ def downgrade() -> None:
 
     # Removendo a constraint CHECK
     op.drop_constraint('chk_quantidade_positiva', 'estoque', type_='check')
-    
-    # Remover a trigger
+
+    # Remover a trigger de verificação de estoque
+    op.execute("""
+    DROP TRIGGER IF EXISTS verifica_estoque_item_venda ON item_venda;
+    """)
+
+    # Remover a função de verificação de estoque
+    op.execute("""
+    DROP FUNCTION IF EXISTS verifica_estoque_item_venda_func;
+    """)
+
+    # Remover a trigger de atualização de estoque
     op.execute("""
     DROP TRIGGER IF EXISTS atualiza_estoque_venda ON item_venda;
     """)
 
-    # Remover a função
+    # Remover a função de atualização de estoque
     op.execute("""
     DROP FUNCTION IF EXISTS atualiza_estoque_venda_func;
     """)
