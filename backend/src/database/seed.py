@@ -84,6 +84,7 @@ def seed_data():
             Venda(id_loja=2, data_venda=date(2024, 1, 24), valor_total=599.80),
             Venda(id_loja=3, data_venda=date(2024, 1, 25), valor_total=899.90),
             Venda(id_loja=4, data_venda=date(2024, 1, 26), valor_total=1299.90),
+            Venda(id_loja=2, data_venda=date(2025, 1, 29), valor_total=24 * 150.00),
         ]
         session.add_all(vendas)
         session.commit()
@@ -96,6 +97,7 @@ def seed_data():
             ItemVenda(id_venda=3, id_produto=4, quantidade=1, preco_unitario=299.90),
             ItemVenda(id_venda=4, id_produto=5, quantidade=2, preco_unitario=49.90),
             ItemVenda(id_venda=3, id_produto=6, quantidade=2, preco_unitario=150.00),
+            ItemVenda(id_venda=5, id_produto=6, quantidade=24, preco_unitario=150.00),
         ]
         session.add_all(itens_venda)
         session.commit()
