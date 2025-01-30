@@ -112,3 +112,4 @@ class Blackboard:
 
     def listar_vendas(self):
         return self.db.query(Venda).all()
+
