@@ -60,6 +60,10 @@ class Blackboard:
 
     def obter_estoque(self, loja_id: int, produto_id: int):
         return self.db.query(Estoque).filter(Estoque.id_loja == loja_id, Estoque.id_produto == produto_id).first()
+    
+    def listar_estoque_por_produto(self, produto_id: int):
+        """Retorna o estoque de um produto em todas as lojas."""
+        return self.db.query(Estoque).filter(Estoque.id_produto == produto_id).all()
 
     def atualizar_estoque(self, loja_id: int, produto_id: int, quantidade: int):
         estoque = self.obter_estoque(loja_id, produto_id)

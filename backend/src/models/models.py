@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, String, Text, Numeric, Date, ForeignKey, UniqueConstraint
+    Column, Integer, String, Text, Numeric, Date, ForeignKey, UniqueConstraint, Index, CheckConstraint
 )
 from sqlalchemy.orm import relationship
 from src.database.database import Base
@@ -44,6 +44,8 @@ class Estoque(Base):
     # Constraints
     __table_args__ = (
         UniqueConstraint('id_loja', 'id_produto', name='uq_estoque_loja_produto'),
+        Index('idx_estoque_produto', 'id_produto'),
+        CheckConstraint('quantidade >= 0', name='chk_quantidade_positiva'),
     )
 
     # Relacionamentos
@@ -102,6 +104,11 @@ class Venda(Base):
     # Relacionamentos
     loja = relationship("Loja", back_populates="vendas")
     itens_venda = relationship("ItemVenda", back_populates="venda")
+
+    # Índices
+    __table_args__ = (
+        Index('idx_venda_loja', 'id_loja'),
+    )
 
 # Modelo ItemVenda
 class ItemVenda(Base):
