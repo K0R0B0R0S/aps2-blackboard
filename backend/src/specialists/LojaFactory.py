@@ -1,6 +1,5 @@
 from .LojaA import LojaA
 from .LojaB import LojaB
-from .LojaC import LojaC
 
 # Vantagens de Usar o Factory Method:
 
@@ -16,7 +15,5 @@ class LojaFactory:
             return LojaA(blackboard)
         elif tipo_loja == 'LojaB':
             return LojaB(blackboard)
-        elif tipo_loja == 'LojaC':
-            return LojaC(blackboard)
         else:
             raise ValueError(f"Tipo de loja {tipo_loja} não reconhecido")

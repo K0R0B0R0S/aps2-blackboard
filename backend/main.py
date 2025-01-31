@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from src.models.models import Loja
 # from src.specialists.LojaA import LojaA
 # from src.specialists.LojaB import LojaB
-# from src.specialists.LojaC import LojaC
 from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm
@@ -27,7 +26,8 @@ blackboard = Blackboard(db)
 @app.route("/")
 def read_root():
     lojas = blackboard.listar_lojas()
-    return render_template('index.html', lojas=lojas)
+    produtos = blackboard.listar_produtos()
+    return render_template('index.html', lojas=lojas, produtos=produtos)
 
 @app.route('/produtos', methods=['GET', 'POST', 'PUT'])
 def listar_produtos():
@@ -61,17 +61,31 @@ def listar_produtos():
 
 @app.route('/vendas', methods=['GET', 'POST'])
 def listar_vendas():
-    vendas = blackboard.listar_vendas()  # Busca a lista de vendas
+
     form = VendaForm(request.form)
 
+    # Preenche o campo de seleção com as lojas disponíveis
+    lojas_choices = [(loja.id_loja, loja.nome_loja) for loja in blackboard.listar_lojas()]
+    lojas_choices.insert(0, (-1, 'Selecione uma loja'))
+    form.id_loja.choices = lojas_choices
+
+    # Preenche o campo de seleção com os produtos disponíveis
+    produtos_choices = [(produto.id_produto, produto.nome_produto) for produto in blackboard.listar_produtos()]
+    produtos_choices.insert(0, (-1, 'Selecione um produto'))
+    form.id_produto.choices = produtos_choices
+
+    vendas = blackboard.listar_vendas()  # Busca a lista de vendas
+    
     if request.method == 'POST' and form.validate():
+
         id_loja = form.id_loja.data
-        produto_id = form.produto_id.data
+        produto_id = form.id_produto.data
         quantidade = form.quantidade.data
         preco_unitario = form.preco_unitario.data
+        data_venda = form.data_venda.data
 
         # Adiciona a venda ao Blackboard
-        blackboard.registrar_venda(id_loja, [(produto_id, quantidade, preco_unitario)])
+        blackboard.registrar_venda(id_loja, [(produto_id, quantidade, preco_unitario)], data_venda)
 
         return redirect(url_for('listar_vendas'))
 
@@ -108,16 +122,12 @@ def ver_estoque_lojas():
 
     loja_a = LojaFactory('LojaA', blackboard)
     loja_b = LojaFactory('LojaB', blackboard)
-    loja_c = LojaFactory('LojaC', blackboard)
 
     print("Loja A:")
     loja_a.verificar_estoque()
 
     print("Loja B:")
     loja_b.verificar_estoque()
-
-    print("Loja C:")
-    loja_c.verificar_estoque()
 
     return "Verifique o console para a lista de produtos em cada loja."
 

@@ -20,10 +20,10 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Id Produto</th>
+                        <th>Loja</th>
+                        <th>Produto</th>
                         <th>Data de Venda</th>
-                        <th>Valor</th>
+                        <th>Valor Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,9 +47,11 @@
             {% from "_formularioajuda.html" import render_field %}
 
             <form method="post" enctype="multipart/form-data" class="btn-form">
-                {{ render_field(form.id_loja, class="form-control", placeholder="Id da Loja") }}
-                {{ render_field(form.data_venda, class="form-control", placeholder="Data de Venda") }}
-                {{ render_field(form.valor_total, class="form-control", placeholder="Valor Total") }}
+                {{ render_field(form.id_loja, class="form-control")}}
+                {{ render_field(form.id_produto, class="form-control")}}
+                {{ render_field(form.quantidade, class="form-control")}}
+                {{ render_field(form.data_venda, class="form-control")}}
+                {{ render_field(form.preco_unitario, class="form-control")}}
                 <button type="submit" id="addVenda" class="btn-primary">Adicionar Venda</button>
             </form>
         </section>

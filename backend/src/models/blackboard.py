@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from src.models.models import Loja, Produto, Estoque, Venda, Compra, ItemCompra, ItemVenda
+from datetime import date
 
 class Blackboard:
     _instance = None
@@ -221,7 +222,7 @@ class Blackboard:
         return self.db.query(Estoque).filter(Estoque.id_produto == produto_id).all()
 
     # Operações de Venda
-    def registrar_venda(self, loja_id: int, produtos: list):
+    def registrar_venda(self, loja_id: int, produtos: list, data_venda: date):
         """
         Registra uma venda no sistema.
         Args:
@@ -232,7 +233,7 @@ class Blackboard:
         """
         
         total_venda = sum([produto[1] * produto[2] for produto in produtos])  # Calculando o valor total da venda
-        venda = Venda(id_loja=loja_id, valor_total=total_venda)
+        venda = Venda(id_loja=loja_id, valor_total=total_venda, data_venda=data_venda)
         self.db.add(venda)
         self.db.commit()
         self.db.refresh(venda)

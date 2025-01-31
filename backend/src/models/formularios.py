@@ -39,9 +39,11 @@ class ItemCompraForm(Form):
     preco_unitario = DecimalField('*Preço Unitário', validators=[DataRequired()])
 
 class VendaForm(Form):
-    id_loja = IntegerField('*ID Loja', validators=[DataRequired()])
-    data_venda = DateField('*Data da Venda', validators=[DataRequired()])
-    valor_total = DecimalField('*Valor Total', validators=[DataRequired()])
+    id_loja = SelectField('*Loja', validators=[DataRequired()], coerce=int)
+    id_produto = SelectField('*Produto', validators=[DataRequired()], coerce=int)
+    quantidade = IntegerField('*Quantidade', validators=[DataRequired()])
+    preco_unitario = DecimalField('*Preço Unitário', validators=[DataRequired()])
+    data_venda = DateField('*Data da Venda', validators=[DataRequired()], default=datetime.now())
 
 class ItemVendaForm(Form):
     id_venda = IntegerField('*ID Venda', validators=[DataRequired()])
