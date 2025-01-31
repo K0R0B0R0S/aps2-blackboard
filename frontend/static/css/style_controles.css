@@ -133,7 +133,7 @@ header h1 {
 .btn-voltar {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #cf0450;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -144,5 +144,5 @@ header h1 {
 }
 
 .btn-voltar:hover {
-    background-color: #0056b3;
+    background-color: #ff0060;
 }

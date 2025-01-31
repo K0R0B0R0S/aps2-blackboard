@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Estoque</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_controles.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+{% extends "layoutControle.html" %}
+
+{% block content %}
+
     <div class="container">
-        <a href="/home" class="btn-voltar">Home</a>
+        <a href="/home" class="btn-voltar">Voltar</a>
         <header>
             <h1>Controle de Estoque - Lojas de Varejo</h1>
         </header>
@@ -46,14 +40,12 @@
 
             <form method="post" enctype="multipart/form-data" class="btn-form">
                 {{ render_field(form.nome_loja, class="form-control", placeholder="Nome da Loja") }}
-                {{ render_field(form.endereco, class="form-control", placeholder="Endereço da Loja") }}
-                {{ render_field(form.telefone, class="form-control", placeholder="Telefone da Loja") }}
+                {{ render_field(form.endereco, class="form-control", placeholder="Endereço completo da Loja") }}
+                {{ render_field(form.telefone, class="form-control", placeholder="Telefone da Loja (com DDD)") }}
 
-                <button type="submit" id="addLoja" class="btn-primary">Adicionar Loja</button>
+                <button type="submit" id="addLoja" class="btn btn-primary btn-sm">Adicionar Loja</button>
             </form>
         </section>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+{% endblock content %}

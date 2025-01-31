@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Produtos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_controles.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+{% extends "layoutControle.html" %}
+
+{% block content %}
+
     <div class="container">
         <a href="/home" class="btn-voltar">Home</a>
         <header>
@@ -57,6 +51,4 @@
         </section>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+{% endblock content %}

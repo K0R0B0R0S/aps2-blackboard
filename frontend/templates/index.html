@@ -1,23 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+{% extends "layoutIndex.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icons=inventory_2,category,store" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-
-<body>
+{% block content %}
 
     <div class="container">
-        <!-- Sidebar Section -->
+       
         <aside>
             <div class="toggle">
                 <div class="logo">
-                    <img src="..\images\logo.png">
-                    <h2>Lojas<span class="danger">CEFET</span></h2>
+                    <img src="{{ url_for('static', filename='images/estoque.png') }}" alt="Logo">
+                    <h2>Stock<span class="danger">CEFET</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">
@@ -31,7 +22,7 @@
                     <span class="material-symbols-outlined">
                        store
                     </span>
-                    <h3>Lojas</h3>
+                    <h3>Nova loja</h3>
                 </a>
                 <a href="/produtos">
                     <span class="material-symbols-outlined">
@@ -46,73 +37,38 @@
                     <h3>Vendas</h3>
                 </a>
                 <a href="#">
-                    <!-- <span class="material-icons-sharp">
-                        logout
-                    </span>
-                    <h3>Logout</h3> -->
                     
                 </a>
             </div>
         </aside>
-        <!-- End of Sidebar Section -->
 
-        <!-- Main Content -->
+       
         <main>
             <h1>Página Inicial</h1>
-            <!-- Analyses -->
-            <!-- <div class="analyse">
-                <div class="sales">
-                    <div class="status">
-                        <div class="info">
-                            <h3>Total Sales</h3>
-                            <h1>$65,024</h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p>+81%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="visits">
-                    <div class="status">
-                        <div class="info">
-                            <h3>Site Visit</h3>
-                            <h1>24,981</h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p>-48%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="searches">
-                    <div class="status">
-                        <div class="info">
-                            <h3>Searches</h3>
-                            <h1>14,147</h1>
-                        </div>
-                        <div class="progresss">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="percentage">
-                                <p>+21%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- End of Analyses -->
 
-            <!-- New Users Section -->
+            <div class="recent-orders">
+                <h2>Nossas Lojas</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Loja</th>
+                            <th>Endereço</th>
+                            <th>Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loja in lojas %}
+                        <tr>
+                            <td>{{ loja.nome_loja }}</td>
+                            <td>{{ loja.endereco }}</td>
+                            <td>{{ loja.telefone }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="/lojas" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Mostrar todas</a>
+            </div>
+
             <div class="recent-orders">
                 <h2>Nossos Produtos</h2>
                 <table class="table">
@@ -135,39 +91,12 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="/produtos">Mostrar todos</a>
+                <a href="/produtos" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Mostrar todos</a>
             </div>
-            <!-- End of New Users Section -->
-
-            <!-- Recent Orders Table -->
-            <div class="recent-orders">
-                <h2>Nossas Lojas</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Loja</th>
-                            <th>Endereço</th>
-                            <th>Telefone</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for loja in lojas %}
-                        <tr>
-                            <td>{{ loja.nome_loja }}</td>
-                            <td>{{ loja.endereco }}</td>
-                            <td>{{ loja.telefone }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <a href="/lojas">Show All</a>
-            </div>
-            <!-- End of Recent Orders -->
+            
 
         </main>
-        <!-- End of Main Content -->
-
-        <!-- Right Section -->
+        
         <div class="right-section">
             <div class="nav">
                 <button id="menu-btn">
@@ -186,7 +115,7 @@
 
                 <div class="profile">
                     <div class="info">
-                        <p>Olá, <b>Fulano</b></p>
+                        <p>Olá, <b>***</b></p>
                         <small class="text-muted">Admin</small>
                     </div>
                     <!-- <div class="profile-photo">
@@ -195,19 +124,10 @@
                 </div>
 
             </div>
-            <!-- End of Nav -->
-
-            <!-- <div class="user-profile">
-                <div class="logo">
-                    <img src="images/logo.png">
-                    <h2>AsmrProg</h2>
-                    <p>Fullstack Web Developer</p>
-                </div>
-            </div> -->
-
+            
             <div class="reminders">
                 <div class="header">
-                    <h2>Reminders</h2>
+                    <h2>Histórico de Vendas</h2>
                     <span class="material-icons-sharp">
                         notifications_none
                     </span>
@@ -215,8 +135,8 @@
 
                 <div class="notification">
                     <div class="icon">
-                        <span class="material-icons-sharp">
-                            volume_up
+                        <span class="material-symbols-outlined">
+                            inventory
                         </span>
                     </div>
                     <div class="content">
@@ -229,34 +149,6 @@
                         <span class="material-icons-sharp">
                             more_vert
                         </span>
-                    </div>
-                </div>
-
-                <div class="notification deactive">
-                    <div class="icon">
-                        <span class="material-icons-sharp">
-                            edit
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>Workshop</h3>
-                            <small class="text_muted">
-                                08:00 AM - 12:00 PM
-                            </small>
-                        </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
-                    </div>
-                </div>
-
-                <div class="notification add-reminder">
-                    <div>
-                        <span class="material-icons-sharp">
-                            add
-                        </span>
-                        <h3>Add Reminder</h3>
                     </div>
                 </div>
 
@@ -266,7 +158,5 @@
 
 
     </div>
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-</body>
 
-</html>
+{% endblock content %}
