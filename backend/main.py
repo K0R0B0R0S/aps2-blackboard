@@ -9,7 +9,7 @@ from src.models.models import Loja
 # from src.specialists.LojaC import LojaC
 from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
-from src.models.formularios import LojaForm, ProdutoForm, VendaForm
+from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
@@ -24,18 +24,12 @@ db = SessionLocal()
 # Criando o blackboard ao iniciar o backend
 blackboard = Blackboard(db)
 
-@app.get("/")
+@app.route("/")
 def read_root():
-    return {"message": "Bem-vindo ao sistema!"}
-
-@app.get("/home")
-def read_root_TEST():
-
     lojas = blackboard.listar_lojas()
-
     return render_template('index.html', lojas=lojas)
 
-@app.route('/produtos', methods=['GET', 'POST'])
+@app.route('/produtos', methods=['GET', 'POST', 'PUT'])
 def listar_produtos():
     produtos = blackboard.listar_produtos()  # Busca a lista de produtos
     form = ProdutoForm(request.form)
@@ -50,9 +44,20 @@ def listar_produtos():
         blackboard.adicionar_produto(nome_produto, descricao, preco_unitario, estoque_minimo)
 
         return redirect(url_for('listar_produtos'))
+    
+    if request.method == 'PUT' and form.validate():
+        id_produto = form.id_produto.data
+        nome_produto = form.nome_produto.data
+        descricao = form.descricao.data
+        preco_unitario = form.preco_unitario.data
+        estoque_minimo = form.estoque_minimo.data
+
+        # Atualiza o produto no Blackboard
+        blackboard.atualizar_produto(id_produto, nome_produto, descricao, preco_unitario, estoque_minimo)
+
+        return redirect(url_for('listar_produtos'))
 
     return render_template('controle_produtos.html', produtos=produtos, form=form)
-
 
 @app.route('/vendas', methods=['GET', 'POST'])
 def listar_vendas():
@@ -71,6 +76,11 @@ def listar_vendas():
         return redirect(url_for('listar_vendas'))
 
     return render_template('controle_vendas.html', vendas=vendas, form=form)
+
+@app.route('/compras', methods=['GET'])
+def listar_compras():
+    compras = blackboard.listar_compras()
+    return render_template('controle_compras.html', compras=compras)
 
 # Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])
@@ -93,7 +103,6 @@ def listar_lojas():
 
     return render_template('controle_lojas.html', lojas=lojas, form=form)
 
-# Rota para ver o estoque das lojas
 @app.route('/ver_estoque_lojas', methods=['GET'])
 def ver_estoque_lojas():
 
@@ -111,7 +120,6 @@ def ver_estoque_lojas():
     loja_c.verificar_estoque()
 
     return "Verifique o console para a lista de produtos em cada loja."
-
 
 if __name__ == "__main__":
     app.run(debug=True)

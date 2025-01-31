@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="/home" class="btn-voltar">Home</a>
+        <a href="/" class="btn-voltar">Home</a>
         <header>
             <h1>Controle de Vendas - Lojas CEFET</h1>
         </header>
@@ -30,7 +30,7 @@
                     {% for venda in vendas %}
                     <tr>
                         <td>{{ venda.id_loja }}</td>
-                        <td>{{ venda.id_produto }}</td>
+                        <td>{{ venda.itens }}</td>
                         <td>{{ venda.data_venda }}</td>
                         <td>{{ venda.valor_total }}</td>
                     </tr>
@@ -48,9 +48,8 @@
 
             <form method="post" enctype="multipart/form-data" class="btn-form">
                 {{ render_field(form.id_loja, class="form-control", placeholder="Id da Loja") }}
-                {{ render_field(form.data_venda, class="form-control", placeholder="Quantidade") }}
-                {{ render_field(form.valor_total, class="form-control", placeholder="Preço Unitário") }}
-            
+                {{ render_field(form.data_venda, class="form-control", placeholder="Data de Venda") }}
+                {{ render_field(form.valor_total, class="form-control", placeholder="Valor Total") }}
                 <button type="submit" id="addVenda" class="btn-primary">Adicionar Venda</button>
             </form>
         </section>
