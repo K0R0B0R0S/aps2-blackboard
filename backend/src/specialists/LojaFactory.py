@@ -9,11 +9,15 @@ from .LojaB import LojaB
 
 class LojaFactory:
     @staticmethod
-    def criar_loja(tipo_loja, blackboard):
+    def criar_loja(tipo_loja, blackboard, nome_loja, endereco, telefone):
         """Método de fábrica para criar lojas de diferentes tipos."""
         if tipo_loja == 'LojaA':
-            return LojaA(blackboard)
+            loja = LojaA(blackboard)
+            blackboard.adicionar_loja(nome_loja, endereco, telefone)  # Usando método de adicionar loja no blackboard
+            return loja
         elif tipo_loja == 'LojaB':
-            return LojaB(blackboard)
+            loja = LojaB(blackboard)
+            blackboard.adicionar_loja(nome_loja, endereco, telefone)  # Usando método de adicionar loja no blackboard
+            return loja
         else:
             raise ValueError(f"Tipo de loja {tipo_loja} não reconhecido")
