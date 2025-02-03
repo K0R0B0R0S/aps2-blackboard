@@ -16,7 +16,7 @@
 
         <!-- Tabela para exibir as lojas e seus produtos -->
         <section class="first-section">
-            <h2>Lista de Vendas</h2>
+            <h2>Histórico de Vendas</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -29,10 +29,10 @@
                 <tbody>
                     {% for venda in vendas %}
                     <tr>
-                        <td>{{ venda.id_loja }}</td>
+                        <td>{{ venda.nome_loja }}</td>
                         <td>{{ venda.itens }}</td>
-                        <td>{{ venda.data_venda }}</td>
-                        <td>{{ venda.valor_total }}</td>
+                        <td>{{ venda.data_venda.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ venda.valor_total_formatado }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

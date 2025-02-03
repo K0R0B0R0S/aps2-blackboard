@@ -8,7 +8,8 @@ from src.models.models import Loja
 # from src.specialists.LojaB import LojaB
 from src.specialists.LojaFactory import LojaFactory
 from src.models.blackboard import Blackboard
-from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm
+from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm
+from decimal import Decimal
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
@@ -23,11 +24,29 @@ db = SessionLocal()
 # Criando o blackboard ao iniciar o backend
 blackboard = Blackboard(db)
 
+def formatarVendas(vendas):
+
+    for venda in vendas:
+        # Se o valor for do tipo string, converta para Decimal
+        if isinstance(venda.valor_total, str):
+            venda.valor_total = Decimal(venda.valor_total.replace('R$', '').replace('.', '').replace(',', '.'))
+
+        # Agora formate o valor para o formato correto, com separação de milhar e vírgula como separador decimal
+        venda.valor_total_formatado = f"R$ {venda.valor_total:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+
+    return vendas
+
+
 @app.route("/")
 def read_root():
     lojas = blackboard.listar_lojas()
     produtos = blackboard.listar_produtos()
-    return render_template('index.html', lojas=lojas, produtos=produtos)
+
+    vendas = blackboard.listar_vendas()  # Busca a lista de vendas
+
+    vendas_formatadas = formatarVendas(vendas)
+
+    return render_template('index.html', lojas=lojas, produtos=produtos, vendas=vendas_formatadas)
 
 @app.route('/produtos', methods=['GET', 'POST', 'PUT'])
 def listar_produtos():
@@ -75,6 +94,8 @@ def listar_vendas():
     form.id_produto.choices = produtos_choices
 
     vendas = blackboard.listar_vendas()  # Busca a lista de vendas
+
+    vendas_formatadas = formatarVendas(vendas)
     
     if request.method == 'POST' and form.validate():
 
@@ -89,14 +110,34 @@ def listar_vendas():
 
         return redirect(url_for('listar_vendas'))
 
-    return render_template('controle_vendas.html', vendas=vendas, form=form)
+    return render_template('controle_vendas.html', vendas=vendas_formatadas, form=form)
+
+@app.route('/fornecedores', methods=['GET', 'POST'])
+def fornecedores():
+
+    form = FornecedorForm(request.form)
+
+    fornecedores = blackboard.listar_fornecedores()  # Busca a lista de fornecedores
+    
+    if request.method == 'POST' and form.validate():
+
+        nome_fornecedor = form.nome_fornecedor.data
+        cpj = form.cnpj.data
+        telefone = form.telefone.data
+        endereco = form.endereco.data
+
+        # Adiciona o fornecedorer novo no banco
+        blackboard.adicionar_fornecedor(nome_fornecedor, cpj, telefone, endereco)
+
+        return redirect(url_for('fornecedores'))
+
+    return render_template('controle_fornecedores.html', fornecedores=fornecedores, form=form)
 
 @app.route('/compras', methods=['GET'])
 def listar_compras():
     compras = blackboard.listar_compras()
     return render_template('controle_compras.html', compras=compras)
 
-# Rota para exibir as lojas
 @app.route('/lojas', methods=['GET', 'POST'])
 def listar_lojas():
 
@@ -109,10 +150,12 @@ def listar_lojas():
         nome_loja = form.nome_loja.data
         endereco = form.endereco.data
         telefone = form.telefone.data
+        tipo_loja = form.tipo_loja.data  # Supondo que você tenha um campo no formulário para definir o tipo da loja
+    
+        # Usando a fábrica para criar a loja e adicionar no blackboard
+        LojaFactory.criar_loja(tipo_loja, blackboard, nome_loja, endereco, telefone)
 
-        # Usando a instância global do Blackboard para adicionar a loja
-        blackboard.adicionar_loja(nome_loja, endereco, telefone)
-
+        # Agora a loja foi criada e já foi adicionada ao banco de dados
         return redirect(url_for('listar_lojas'))
 
     return render_template('controle_lojas.html', lojas=lojas, form=form)
@@ -120,9 +163,9 @@ def listar_lojas():
 @app.route('/ver_estoque_lojas', methods=['GET'])
 def ver_estoque_lojas():
 
-    loja_a = LojaFactory('LojaA', blackboard)
-    loja_b = LojaFactory('LojaB', blackboard)
-
+    loja_a = LojaFactory.criar_loja('LojaA', blackboard)
+    loja_b = LojaFactory.criar_loja('LojaB', blackboard)
+   
     print("Loja A:")
     loja_a.verificar_estoque()
 

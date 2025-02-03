@@ -9,6 +9,7 @@ class LojaForm(Form):
     nome_loja = StringField('*Nome da Loja', validators=[DataRequired(), Length(max=100)])
     endereco = StringField('*Endereço', validators=[DataRequired(), Length(max=200)])
     telefone = StringField('*Telefone', validators=[DataRequired(), Length(max=15)])
+    tipo_loja = SelectField('Tipo de Loja', choices=[('', 'Selecione um tipo...'), ('LojaA', 'Loja A'), ('LojaB', 'Loja B')], validators=[DataRequired()])
 
 class ProdutoForm(Form):
     nome_produto = StringField('Nome do Produto', validators=[DataRequired()])

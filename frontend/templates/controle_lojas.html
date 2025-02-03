@@ -9,7 +9,7 @@
         </header>
 
         <!-- Tabela para exibir as lojas e seus produtos -->
-        <section class="first-section">
+        <!-- <section class="first-section">
             <h2>Lista de Lojas</h2>
             <table class="table">
                 <thead>
@@ -29,7 +29,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </section>
+        </section> -->
 
         <!-- Formulário para adicionar uma nova loja -->
         <section class="sec-section">
@@ -42,6 +42,7 @@
                 {{ render_field(form.nome_loja, class="form-control", placeholder="Nome da Loja") }}
                 {{ render_field(form.endereco, class="form-control", placeholder="Endereço completo da Loja") }}
                 {{ render_field(form.telefone, class="form-control", placeholder="Telefone da Loja (com DDD)") }}
+                {{ render_field(form.tipo_loja, class="form-control", placeholder="Tipo da Loja") }}
 
                 <button type="submit" id="addLoja" class="btn btn-primary btn-sm">Adicionar Loja</button>
             </form>

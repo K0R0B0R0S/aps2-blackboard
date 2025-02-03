@@ -1,0 +1,54 @@
+{% extends "layoutControle.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <a href="/" class="btn-voltar">Voltar</a>
+        <header>
+            <h1>Controle de Fornecedores - Lojas de Varejo</h1>
+        </header>
+
+        <!-- Tabela para exibir os produtos -->
+        <section class="first-section">
+            <h2>Lista de Fornecedores</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CNPJ</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fornecedor in fornecedores %}
+                    <tr>
+                        <td>{{ fornecedor.nome_fornecedor }}</td>
+                        <td>{{ fornecedor.cnpj }}</td>
+                        <td>{{ fornecedor.telefone }}</td>
+                        <td>{{ fornecedor.endereco }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Formulário para adicionar um novo produto -->
+        <section class="sec-section">
+            <h2>Adicionar Novo Fornecedor</h2>
+
+            {% include '_messages.html' %}
+            {% from "_formularioajuda.html" import render_field %}
+
+            <form method="post" enctype="multipart/form-data" class="btn-form">
+                {{ render_field(form.nome_fornecedor, class="form-control", placeholder="Nome do Fornecedor") }}
+                {{ render_field(form.cnpj, class="form-control", placeholder="CNPJ") }}
+                {{ render_field(form.telefone, class="form-control", placeholder="Telefone") }}
+                {{ render_field(form.endereco, class="form-control", placeholder="Endereço") }}
+
+                <button type="submit" id="addFornecedor" class="btn-primary">Adicionar Fornecedor</button>
+            </form>
+        </section>
+    </div>
+
+{% endblock content %}

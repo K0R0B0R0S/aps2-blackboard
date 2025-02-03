@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.models.models import Loja, Produto, Estoque, Venda, Compra, ItemCompra, ItemVenda
+from src.models.models import Loja, Produto, Estoque, Venda, Compra, ItemCompra, ItemVenda, Fornecedor
 from datetime import date
 
 class Blackboard:
@@ -259,6 +259,9 @@ class Blackboard:
             f"{self.obter_produto(item.id_produto).nome_produto} (Qtd: {item.quantidade})"
             for item in self.db.query(ItemVenda).filter(ItemVenda.id_venda == venda.id_venda).all()
             ])
+
+            # Adicionando o nome da loja associada à venda
+            venda.nome_loja = venda.loja.nome_loja  # Acesse o nome da loja diretamente
         return vendas
 
     # Operações de Compra
@@ -295,3 +298,33 @@ class Blackboard:
         """
         
         return self.db.query(Compra).order_by(Compra.data_compra.desc()).all()
+    
+    def listar_fornecedores(self):
+        """
+        Lista todas os fornecedores do banco de dados.
+
+        Returns:
+            list: Uma lista de objetos Fornecedor representando todas os fornecedores no banco de dados.
+        """
+        
+        return self.db.query(Fornecedor).all()
+    
+    def adicionar_fornecedor(self, nome_fornecedor: str, cnpj: str, telefone: float, endereco: int):
+        """
+        Adiciona um novo fornecedor ao banco de dados.
+
+        Args:
+            nome_produto (str): O nome do produto a ser adicionado.
+            descricao (str): A descrição do produto.
+            preco_unitario (float): O preço unitário do produto.
+            estoque_minimo (int): A quantidade mínima de estoque do produto.
+
+        Returns:
+            Produto: O objeto Produto recém-adicionado ao banco de dados.
+        """
+        
+        novo_forncedor = Fornecedor(nome_fornecedor=nome_fornecedor, cnpj=cnpj, telefone=telefone, endereco=endereco)
+        self.db.add(novo_forncedor)
+        self.db.commit()
+        self.db.refresh(novo_forncedor)
+        return novo_forncedor

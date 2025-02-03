@@ -36,7 +36,7 @@
                     </span>
                     <h3>Vendas</h3>
                 </a>
-                <a href="#">
+                <a href="/fornecedores">
                     <span class="material-symbols-outlined">
                         delivery_truck_speed
                     </span>
@@ -138,7 +138,9 @@
                         notifications_none
                     </span>
                 </div>
-
+                
+                
+                {% for venda in vendas %}
                 <div class="notification">
                     <div class="icon">
                         <span class="material-symbols-outlined">
@@ -147,9 +149,13 @@
                     </div>
                     <div class="content">
                         <div class="info">
-                            <h3>Workshop</h3>
+                            <h3>{{ venda.nome_loja }}</h3>
                             <small class="text_muted">
-                                08:00 AM - 12:00 PM
+                                {{ venda.itens }}
+                            </small>
+                            <br>
+                            <small class="text_muted">
+                            {{ venda.valor_total_formatado }}
                             </small>
                         </div>
                         <span class="material-icons-sharp">
@@ -157,6 +163,7 @@
                         </span>
                     </div>
                 </div>
+                {% endfor %}
 
             </div>
 
