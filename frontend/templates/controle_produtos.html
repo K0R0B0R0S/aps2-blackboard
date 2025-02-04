@@ -11,26 +11,28 @@
         <!-- Tabela para exibir os produtos -->
         <section class="first-section">
             <h2>Lista de Produtos</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Preço Unitário</th>
-                        <th>Estoque Mínimo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for produto in produtos %}
-                    <tr>
-                        <td>{{ produto.nome_produto }}</td>
-                        <td>{{ produto.descricao }}</td>
-                        <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
-                        <td>{{ produto.estoque_minimo }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div id="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Preço Unitário</th>
+                            <th>Estoque Mínimo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr>
+                            <td>{{ produto.nome_produto }}</td>
+                            <td>{{ produto.descricao }}</td>
+                            <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
+                            <td>{{ produto.estoque_minimo }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <!-- Formulário para adicionar um novo produto -->

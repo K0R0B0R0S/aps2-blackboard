@@ -353,9 +353,14 @@ main .recent-orders table{
     width: 100%;
     padding: var(--card-padding);
     text-align: center;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
     border-radius: var(--card-border-radius);
     transition: all 0.3s ease;
+}
+
+main .recent-orders table th{
+    background-color: var(--color-white);
+    border-radius: var(--card-border-radius);
 }
 
 main .recent-orders table:hover{
@@ -377,6 +382,36 @@ main .recent-orders a{
     display: block;
     margin: 1rem auto;
     color: var(--color-primary);
+}
+
+
+#table-container {
+    max-height: 325px; /* Define a altura máxima da tabela */
+    overflow-y: auto; /* Habilita o scroll vertical */
+}
+
+#table-container table {
+    width: 100%; /* Garante que a tabela ocupe toda a largura do contêiner */
+    border-collapse: collapse; /* Remove espaçamento entre as células da tabela */
+}
+
+#table-container th, #table-container td {
+    /* border: 1px solid #ddd; Adiciona borda às células */
+    padding-bottom: 8px;
+	padding-top: 8px; /* Adiciona padding às células */
+    /* text-align: left; Alinha o texto à esquerda */
+}
+
+#table-container th {
+    /* background-color: #f2f2f2; */
+    /* background-color: white; */
+    position: sticky; /* Faz com que os cabeçalhos permaneçam visíveis ao rolar */
+    top: 0; /* Define a posição dos cabeçalhos */
+}
+
+#secaoNotificacao {
+    max-height: 680px; /* Define a altura máxima da tabela */
+    overflow-y: auto; /* Habilita o scroll vertical */
 }
 
 .right-section{
@@ -486,14 +521,14 @@ main .recent-orders a{
     margin-bottom: 0.7rem;
     padding: 1.4rem var(--card-padding);
     border-radius: var(--border-radius-2);
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-.right-section .reminders .notification:hover{
+/* .right-section .reminders .notification:hover{
     box-shadow: none;
-}
+} */
 
 .right-section .reminders .notification .content{
     display: flex;

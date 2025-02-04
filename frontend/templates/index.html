@@ -57,50 +57,55 @@
 
             <div class="recent-orders">
                 <h2>Nossas Lojas</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Loja</th>
-                            <th>Endereço</th>
-                            <th>Telefone</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for loja in lojas %}
-                        <tr>
-                            <td>{{ loja.nome_loja }}</td>
-                            <td>{{ loja.endereco }}</td>
-                            <td>{{ loja.telefone }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <a href="/lojas" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Mostrar todas</a>
+                <div id="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Loja</th>
+                                <th>Endereço</th>
+                                <th>Telefone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loja in lojas %}
+                            <tr>
+                                <td>{{ loja.nome_loja }}</td>
+                                <td>{{ loja.endereco }}</td>
+                                <td>{{ loja.telefone }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <a href="/lojas" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Cadastrar nova</a>
             </div>
 
             <div class="recent-orders">
                 <h2>Nossos Produtos</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Preço</th>
-                            <th>Estoque Mínimo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for produto in produtos %}
-                        <tr>
-                            <td>{{ produto.nome_produto }}</td>
-                            <td>{{ produto.descricao }}</td>
-                            <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
-                            <td>{{ produto.estoque_minimo }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <a href="/produtos" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Mostrar todos</a>
+                <div id="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Preço</th>
+                                <th>Estoque Mínimo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for produto in produtos %}
+                            <tr>
+                                <td>{{ produto.nome_produto }}</td>
+                                <td>{{ produto.descricao }}</td>
+                                <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
+                                <td>{{ produto.estoque_minimo }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="/produtos" style="background-color: #cf0450; padding-bottom: 0.5rem; padding-top: 0.5rem; border-radius: 15px; width: 10%; color: white;">Cadastrar novo</a>
             </div>
             
 
@@ -139,31 +144,33 @@
                     </span>
                 </div>
                 
-                
-                {% for venda in vendas %}
-                <div class="notification">
-                    <div class="icon">
-                        <span class="material-symbols-outlined">
-                            inventory
-                        </span>
-                    </div>
-                    <div class="content">
-                        <div class="info">
-                            <h3>{{ venda.nome_loja }}</h3>
-                            <small class="text_muted">
-                                {{ venda.itens }}
-                            </small>
-                            <br>
-                            <small class="text_muted">
-                            {{ venda.valor_total_formatado }}
-                            </small>
+                <div id="secaoNotificacao">
+                    {% for venda in vendas %}
+                    <div class="notification">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                                inventory
+                            </span>
                         </div>
-                        <span class="material-icons-sharp">
-                            more_vert
-                        </span>
+                        <div class="content">
+                            <div class="info">
+                                <h3>{{ venda.nome_loja }}</h3>
+                                <small class="text_muted">
+                                    {{ venda.itens }}
+                                </small>
+                                <br>
+                                <small class="text_muted">
+                                {{ venda.valor_total_formatado }}
+                                </small>
+                            </div>
+                            <span class="material-icons-sharp">
+                                more_vert
+                            </span>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                
 
             </div>
 

@@ -146,3 +146,27 @@ header h1 {
 .btn-voltar:hover {
     background-color: #ff0060;
 }
+
+#table-container {
+    max-height: 200px; /* Define a altura máxima da tabela */
+    overflow-y: auto; /* Habilita o scroll vertical */
+}
+
+#table-container table {
+    width: 100%; /* Garante que a tabela ocupe toda a largura do contêiner */
+    border-collapse: collapse; /* Remove espaçamento entre as células da tabela */
+}
+
+#table-container th, #table-container td {
+    /* border: 1px solid #ddd; Adiciona borda às células */
+    padding-bottom: 8px;
+	padding-top: 8px; /* Adiciona padding às células */
+    /* text-align: left; Alinha o texto à esquerda */
+}
+
+#table-container th {
+    /* background-color: #f2f2f2; */
+    /* background-color: white; */
+    position: sticky; /* Faz com que os cabeçalhos permaneçam visíveis ao rolar */
+    top: 0; /* Define a posição dos cabeçalhos */
+}
