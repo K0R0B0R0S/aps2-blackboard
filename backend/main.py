@@ -144,27 +144,41 @@ def listar_compras():
     compras = blackboard.listar_compras()
     return render_template('controle_compras.html', compras=compras)
 
-@app.route('/lojas', methods=['GET', 'POST'])
-def listar_lojas():
+@app.route('/lojas', defaults={'loja_id': None}, methods=['GET', 'POST'])
+def listar_lojas(loja_id):
 
     lojas = blackboard.listar_lojas()  # Usando o método do Blackboard para buscar lojas
 
     form = LojaForm(request.form)
 
+    # Se a rota for chamada via POST, faz o cadastro ou atualização
     if request.method == 'POST' and form.validate():
-        
         nome_loja = form.nome_loja.data
         endereco = form.endereco.data
         telefone = form.telefone.data
-        tipo_loja = form.tipo_loja.data  # Supondo que você tenha um campo no formulário para definir o tipo da loja
-    
-        # Usando a fábrica para criar a loja e adicionar no blackboard
-        LojaFactory.criar_loja(tipo_loja, blackboard, nome_loja, endereco, telefone)
+        tipo_loja = form.tipo_loja.data
 
-        # Agora a loja foi criada e já foi adicionada ao banco de dados
-        return redirect(url_for('listar_lojas'))
+        # Se a loja_id estiver presente, faz a atualização
+        if loja_id:
+            blackboard.atualizar_loja(loja_id, nome_loja, endereco, telefone)
 
-    return render_template('controle_lojas.html', lojas=lojas, form=form)
+            return redirect(url_for('listar_lojas'))  # Atualiza a lista
+        # Caso contrário, faz a inserção de uma nova loja
+        else:
+            # Usando a fábrica para criar a loja e adicionar no blackboard
+            LojaFactory.criar_loja(tipo_loja, blackboard, nome_loja, endereco, telefone)
+
+            return redirect(url_for('listar_lojas'))
+
+    return render_template('controle_lojas.html', lojas=lojas, form=form, form_title="Cadastrar Loja", button_text="Adicionar Loja")
+
+@app.route('/editar_loja/<int:loja_id>/<string:nome_loja>/<string:endereco>/<string:telefone>', methods=['POST'])
+def editar_loja(loja_id, nome_loja, endereco, telefone):
+    # Atualiza a loja no banco de dados ou no Blackboard
+    blackboard.atualizar_loja(loja_id, nome_loja, endereco, telefone)
+
+    # Retorna uma resposta simples de sucesso ou redireciona, sem renderizar HTML
+    return '', 204  # Retorna um status 204 sem conteúdo (sucesso)
 
 @app.route('/ver_estoque_lojas', methods=['GET'])
 def ver_estoque_lojas():

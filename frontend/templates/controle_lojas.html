@@ -9,31 +9,42 @@
         </header>
 
         <!-- Tabela para exibir as lojas e seus produtos -->
-        <!-- <section class="first-section">
+        <section class="first-section">
             <h2>Lista de Lojas</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Loja</th>
-                        <th>Endereço</th>
-                        <th>Telefone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for loja in lojas %}
-                    <tr>
-                        <td>{{ loja.nome_loja }}</td>
-                        <td>{{ loja.endereco }}</td>
-                        <td>{{ loja.telefone }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section> -->
+            <div id="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Loja</th>
+                            <th>Endereço</th>
+                            <th>Telefone</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loja in lojas %}
+                        <tr
+                            data-loja-id="{{ loja.id_loja }}"
+                            data-loja-nome="{{ loja.nome_loja }}"
+                            data-loja-endereco="{{ loja.endereco }}"
+                            data-loja-telefone="{{ loja.telefone }}"
+                        >
+                            <td id="{{ loja.nome_loja }}">{{ loja.nome_loja }}</td>
+                            <td id="{{ loja.endereco }}">{{ loja.endereco }}</td>
+                            <td id="{{ loja.telefone }}">{{ loja.telefone }}</td>
+                            <td><button type="button" style="cursor: pointer;" class="btn btn-primary btn-sm select-loja">Selecionar</button></td>
+                            <input type="hidden" name="loja_id" value="{{ loja.id_loja }}">
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </section>
 
         <!-- Formulário para adicionar uma nova loja -->
         <section class="sec-section">
-            <h2>Adicionar Nova Loja</h2>
+            <h2>Cadastro de Lojas</h2>
 
             {% include '_messages.html' %}
             {% from "_formularioajuda.html" import render_field %}
@@ -43,10 +54,97 @@
                 {{ render_field(form.endereco, class="form-control", placeholder="Endereço completo da Loja") }}
                 {{ render_field(form.telefone, class="form-control", placeholder="Telefone da Loja (com DDD)") }}
                 {{ render_field(form.tipo_loja, class="form-control", placeholder="Tipo da Loja") }}
+                
+                <input type="hidden" name="loja_id" value="{{ form.loja_id.data }}"> <!-- hidden input para editar a loja existente -->
 
-                <button type="submit" id="addLoja" class="btn btn-primary btn-sm">Adicionar Loja</button>
+                <button type="submit" id="addLoja" class="btn btn-primary btn-sm">{{ button_text }}</button>
+                 <!-- hidden input para editar a loja existente -->
             </form>
         </section>
     </div>
+
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        addEventSelect()
+
+        function preencherFormulario(row) {
+            const lojaId = row.dataset.lojaId;
+            const lojaNome = row.dataset.lojaNome;
+            const lojaEndereco = row.dataset.lojaEndereco;
+            const lojaTelefone = row.dataset.lojaTelefone;
+            
+
+            // Preenche os campos do formulário com os dados do processo e define '' antes de atribuir os valores
+            const lojaIdField = document.querySelector('[name="loja_id"]');
+            if (lojaIdField) {
+                lojaIdField.value = '';
+                lojaIdField.value = lojaId;
+            }
+
+            const lojaNomeField = document.querySelector('input[name="nome_loja"]');
+            if (lojaNomeField) {
+                lojaNomeField.value = '';
+                lojaNomeField.value = lojaNome;
+            }
+
+            const lojaEnderecoField = document.querySelector('input[name="endereco"]');
+            if (lojaEnderecoField) {
+                lojaEnderecoField.value = '';
+                lojaEnderecoField.value = lojaEndereco;
+            }
+
+            const lojaTelefoneField = document.querySelector('input[name="telefone"]');
+            if (lojaTelefoneField) {
+                lojaTelefoneField.value = '';
+                lojaTelefoneField.value = lojaTelefone;
+            }
+
+            document.querySelector('button[type="submit"]').textContent = 'Atualizar Loja';
+
+        }
+
+        function addEventSelect(){
+
+            const lojaIdField = document.querySelector('[name="loja_id"]');
+            lojaIdField.value = '';
+
+            document.querySelectorAll('.select-loja').forEach(button => {
+                button.addEventListener('click', function() {
+                    const row = button.closest('tr');
+                    console.log("Selecionando loja:", row);
+                    preencherFormulario(row);
+                
+                });
+            });
+        }
+
+        addlojabutton = document.getElementById('addLoja')
+
+        addlojabutton.addEventListener('click', function(){
+            const lojaIdField = document.querySelector('input[name="loja_id"]');
+            const lojaIdFieldValue = document.querySelector('input[name="loja_id"]').value;
+            const lojaNomeFieldValue = document.querySelector('input[name="nome_loja"]').value;
+            const lojaEnderecoFieldValue = document.querySelector('input[name="endereco"]').value;
+            const lojaTelefoneFieldValue = document.querySelector('input[name="telefone"]').value;
+            
+            // Verifica se o campo tem valor
+            if (lojaIdField && lojaIdField.value) {
+                // Construa a URL com os parâmetros
+				fetch(`/editar_loja/${lojaIdFieldValue}/${encodeURIComponent(lojaNomeFieldValue)}/${encodeURIComponent(lojaEnderecoFieldValue)}/${encodeURIComponent(lojaTelefoneFieldValue)}`, {
+                    method: 'POST'
+                })
+
+            } 
+        })
+
+
+
+    });
+
+
+
+    </script>
 
 {% endblock content %}

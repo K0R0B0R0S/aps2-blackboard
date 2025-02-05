@@ -148,7 +148,7 @@ header h1 {
 }
 
 #table-container {
-    max-height: 200px; /* Define a altura máxima da tabela */
+    max-height: 190px; /* Define a altura máxima da tabela */
     overflow-y: auto; /* Habilita o scroll vertical */
 }
 

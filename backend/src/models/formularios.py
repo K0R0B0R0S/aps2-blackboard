@@ -1,11 +1,12 @@
 import re
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField, TextAreaField, DecimalField, SelectField, DateField, FloatField
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField, TextAreaField, DecimalField, SelectField, DateField, FloatField, HiddenField
 from flask import session
 from wtforms.validators import DataRequired, Length, Optional, Regexp, NumberRange
 from wtforms import ValidationError
 from datetime import datetime
 
 class LojaForm(Form):
+    loja_id = HiddenField()
     nome_loja = StringField('*Nome da Loja', validators=[DataRequired(), Length(max=100)])
     endereco = StringField('*Endereço', validators=[DataRequired(), Length(max=200)])
     telefone = StringField('*Telefone', validators=[DataRequired(), Length(max=15)])
