@@ -44,7 +44,7 @@
                 </a>
                 <a href="/relatorio_estoque">
                     <span class="material-symbols-outlined">
-                        delivery_truck_speed
+                        sticky_note_2
                     </span>
                     <h3>Relatório</h3>
                 </a>
@@ -70,14 +70,21 @@
                                 <th>Loja</th>
                                 <th>Endereço</th>
                                 <th>Telefone</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for loja in lojas %}
-                            <tr>
+                            <tr
+                                data-loja-id="{{ loja.id_loja }}"
+                                data-loja-nome="{{ loja.nome_loja }}"
+                                data-loja-endereco="{{ loja.endereco }}"
+                                data-loja-telefone="{{ loja.telefone }}"
+                            >
                                 <td>{{ loja.nome_loja }}</td>
                                 <td>{{ loja.endereco }}</td>
                                 <td>{{ loja.telefone }}</td>
+                                <td><button type="button" style="cursor: pointer;" id="botaoRelatorio" class="btn btn-primary btn-sm select-relatorio">Relatório</button></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -184,5 +191,38 @@
 
 
     </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            addEventSelect()
+            
+            function relatorio(row) {
+                const lojaId = row.dataset.lojaId;
+                
+                // Construa a URL com os parâmetros
+                const url = `/estoque/${lojaId}`;
+
+                // Redirecione para a URL
+                window.location.href = url;
+                
+            }
+
+            function addEventSelect(){
+
+                document.querySelectorAll('.select-relatorio').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const row = button.closest('tr');
+                        console.log("Selecionando relatorio:", row);
+                        relatorio(row);
+                        
+                    });
+                });
+            }
+
+        });
+
+    </script>
 
 {% endblock content %}
