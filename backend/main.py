@@ -7,14 +7,19 @@ from src.models.models import Loja
 # from src.specialists.LojaA import LojaA
 # from src.specialists.LojaB import LojaB
 from src.specialists.LojaFactory import LojaFactory
+from src.specialists.GerenciadorDeEstoque import GerenciadorDeEstoque
+from src.specialists.GerenciadorDeEstoque import EstrategiaConservadora, EstrategiaAgressiva, EstrategiaPersonalizada
 from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm
+from flask_socketio import SocketIO, emit
 from decimal import Decimal
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
             template_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'templates'),
             static_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static'))
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
 
 # Criando as tabelas no banco de dados, caso ainda não existam
 Base.metadata.create_all(bind=engine)
@@ -23,6 +28,7 @@ db = SessionLocal()
 
 # Criando o blackboard ao iniciar o backend
 blackboard = Blackboard(db)
+gerenciador_estoque = GerenciadorDeEstoque(blackboard, socketio=socketio)
 
 def formatarVendas(vendas):
 
@@ -173,6 +179,33 @@ def ver_estoque_lojas():
     loja_b.verificar_estoque()
 
     return "Verifique o console para a lista de produtos em cada loja."
+
+@app.route("/relatorio_estoque", methods=['GET'])
+def verificar_estoque():
+    estrategia = request.args.get('estrategia', 'conservadora')
+    fator = request.args.get('fator', 1)
+
+    if estrategia == 'conservadora':
+        gerenciador_estoque.definir_estrategia_reposicao(EstrategiaConservadora())
+    elif estrategia == 'agressiva':
+        gerenciador_estoque.definir_estrategia_reposicao(EstrategiaAgressiva())
+    elif estrategia == 'personalizada':
+        gerenciador_estoque.definir_estrategia_reposicao(EstrategiaPersonalizada(fator=float(fator)))
+    else:
+        return "Estratégia inválida ou fator não fornecido para estratégia personalizada", 400
+
+    alerta_estoque_minimo = gerenciador_estoque.verificar_estoque_minimo()
+    sugestao_reposicao = gerenciador_estoque.sugerir_reposicao()
+
+    return render_template('relatorio_estoque.html', alerta_estoque_minimo=alerta_estoque_minimo, sugestao_reposicao=sugestao_reposicao)
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
 
 if __name__ == "__main__":
     app.run(debug=True)

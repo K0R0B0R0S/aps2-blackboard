@@ -10,6 +10,33 @@ from src.specialists.strategies.strategy import (
 
 if TYPE_CHECKING:
     from src.models.blackboard import Blackboard
+    from flask_socketio import SocketIO
+
+
+class Subject:
+    def __init__(self):
+        self._observers = []
+
+    def attach(self, observer):
+        self._observers.append(observer)
+
+    def detach(self, observer):
+        self._observers.remove(observer)
+
+    def notify(self, message):
+        for observer in self._observers:
+            observer.update(message)
+
+class Observer:
+    def update(self, message):
+        pass
+
+class EstoqueObserver(Observer):
+    def __init__(self, socketio: 'SocketIO'):
+        self.socketio = socketio
+
+    def update(self, message):
+        self.socketio.emit('estoque_alert', message)
 
 class TipoMovimentacao():
     """
@@ -24,9 +51,13 @@ class TipoMovimentacao():
     SAIDA = 6  # Movimentação de saída no estoque
 
 class GerenciadorDeEstoque:
-    def __init__(self, blackboard: Blackboard, estrategia_reposicao=None):
+    def __init__(self, blackboard: Blackboard, estrategia_reposicao: EstrategiaReposicao = None, socketio: 'SocketIO' = None):
         self.blackboard = blackboard
         self.estrategia_reposicao = estrategia_reposicao or EstrategiaConservadora()
+        self.subject = Subject()
+        if socketio:
+            self.observer = EstoqueObserver(socketio)
+            self.subject.attach(self.observer)
 
     def definir_estrategia_reposicao(self, estrategia):
         """
@@ -47,14 +78,16 @@ class GerenciadorDeEstoque:
             estoque = self.blackboard.listar_estoque_por_produto(produto.id_produto)
             for item in estoque:
                 if item.quantidade < produto.estoque_minimo:
-                    alertas.append({
+                    alerta = {
                         'tipo': TipoMovimentacao.ESTOQUE_BAIXO,
                         'produto': produto.nome_produto,
                         'id_produto': produto.id_produto,
                         'loja': item.id_loja,
                         'quantidade_atual': item.quantidade,
                         'estoque_minimo': produto.estoque_minimo
-                    })
+                    }
+                    alertas.append(alerta)
+                    self.subject.notify(alerta)
         return alertas
 
     def sugerir_reposicao(self):
