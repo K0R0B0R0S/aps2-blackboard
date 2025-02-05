@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+from src.models.exceptions import ErroBancoException, EstoqueInsuficienteException, QuantidadeInvalidaException
 from src.database.database import SessionLocal, engine, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -7,8 +8,7 @@ from src.models.models import Loja
 # from src.specialists.LojaA import LojaA
 # from src.specialists.LojaB import LojaB
 from src.specialists.LojaFactory import LojaFactory
-from src.specialists.GerenciadorDeEstoque import GerenciadorDeEstoque
-from src.specialists.GerenciadorDeEstoque import EstrategiaConservadora, EstrategiaAgressiva, EstrategiaPersonalizada
+from src.specialists.GerenciadorDeEstoque import GerenciadorDeEstoque, EstrategiaConservadora, EstrategiaAgressiva, EstrategiaPersonalizada
 from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm
 from flask_socketio import SocketIO, emit
@@ -86,35 +86,44 @@ def listar_produtos():
 
 @app.route('/vendas', methods=['GET', 'POST'])
 def listar_vendas():
-
     form = VendaForm(request.form)
 
-    # Preenche o campo de seleção com as lojas disponíveis
-    lojas_choices = [(loja.id_loja, loja.nome_loja) for loja in blackboard.listar_lojas()]
-    lojas_choices.insert(0, (-1, 'Selecione uma loja'))
-    form.id_loja.choices = lojas_choices
+    # Preenche os selects com lojas e produtos disponíveis
+    form.id_loja.choices = [(-1, 'Selecione uma loja')] + [
+        (loja.id_loja, loja.nome_loja) for loja in blackboard.listar_lojas()
+    ]
+    form.id_produto.choices = [(-1, 'Selecione um produto')] + [
+        (produto.id_produto, produto.nome_produto) for produto in blackboard.listar_produtos()
+    ]
 
-    # Preenche o campo de seleção com os produtos disponíveis
-    produtos_choices = [(produto.id_produto, produto.nome_produto) for produto in blackboard.listar_produtos()]
-    produtos_choices.insert(0, (-1, 'Selecione um produto'))
-    form.id_produto.choices = produtos_choices
+    vendas_formatadas = formatarVendas(blackboard.listar_vendas())
 
-    vendas = blackboard.listar_vendas()  # Busca a lista de vendas
-
-    vendas_formatadas = formatarVendas(vendas)
-    
     if request.method == 'POST' and form.validate():
+        try:
+            # Obtendo dados do formulário
+            id_loja = form.id_loja.data
+            produto_id = form.id_produto.data
+            quantidade = form.quantidade.data
+            preco_unitario = form.preco_unitario.data
+            data_venda = form.data_venda.data
 
-        id_loja = form.id_loja.data
-        produto_id = form.id_produto.data
-        quantidade = form.quantidade.data
-        preco_unitario = form.preco_unitario.data
-        data_venda = form.data_venda.data
+            # Registrando a venda
+            blackboard.registrar_venda(id_loja, [(produto_id, quantidade, preco_unitario)], data_venda)
 
-        # Adiciona a venda ao Blackboard
-        blackboard.registrar_venda(id_loja, [(produto_id, quantidade, preco_unitario)], data_venda)
+            flash("Venda registrada com sucesso!", "success")
+            return redirect(url_for('listar_vendas'))
 
-        return redirect(url_for('listar_vendas'))
+        except QuantidadeInvalidaException as e:
+            flash(str(e), "danger")
+        
+        except EstoqueInsuficienteException as e:
+            flash(str(e), "danger")
+
+        except ErroBancoException as e:
+            flash(f"Erro no banco de dados: {str(e)}", "danger")
+
+        except Exception as e:
+            flash("Ocorreu um erro inesperado. Tente novamente.", "danger")
 
     return render_template('controle_vendas.html', vendas=vendas_formatadas, form=form)
 

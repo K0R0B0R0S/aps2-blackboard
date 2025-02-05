@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from src.models.models import Loja, Produto, Estoque, Venda, Compra, ItemCompra, ItemVenda, Fornecedor
+from src.models.exceptions import ErroBancoException, QuantidadeInvalidaException, EstoqueInsuficienteException
 from datetime import date
 
 class Blackboard:
@@ -20,7 +21,7 @@ class Blackboard:
             cls._instance.db_session = db_session  # Inicializa a sessão de banco de dados
         return cls._instance  # Retorna a instância única
 
-    def __init__(self, db_session=None):
+    def __init__(self, db_session: Session=None):
         """
         Inicia a instância do Blackboard com uma sessão de banco de dados, se necessário.
         """
@@ -225,27 +226,60 @@ class Blackboard:
     def registrar_venda(self, loja_id: int, produtos: list, data_venda: date):
         """
         Registra uma venda no sistema.
+        
         Args:
             loja_id (int): O ID da loja.
             produtos (list): Uma lista de tuplas contendo (produto_id, quantidade, preco_unitario).
+            data_venda (date): Data da venda.
+
         Returns:
             Venda: O objeto de venda registrado.
+
+        Raises:
+            QuantidadeInvalidaException: Se a quantidade do produto for inválida.
+            EstoqueInsuficienteException: Se não houver estoque suficiente.
+            ErroBancoException: Para outros erros do banco de dados.
         """
-        
-        total_venda = sum([produto[1] * produto[2] for produto in produtos])  # Calculando o valor total da venda
-        venda = Venda(id_loja=loja_id, valor_total=total_venda, data_venda=data_venda)
-        self.db.add(venda)
-        self.db.commit()
-        self.db.refresh(venda)
+        try:
+            total_venda = sum(produto[1] * produto[2] for produto in produtos)
 
-        # Criando itens de venda
-        for produto_id, quantidade, preco_unitario in produtos:
-            item_venda = ItemVenda(id_venda=venda.id_venda, id_produto=produto_id, quantidade=quantidade, preco_unitario=preco_unitario)
-            self.db.add(item_venda)
+            for produto_id, quantidade, preco_unitario in produtos:
+                if quantidade <= 0:
+                    raise QuantidadeInvalidaException("A quantidade do item deve ser maior que zero.")
+
+            venda = Venda(id_loja=loja_id, valor_total=total_venda, data_venda=data_venda)
+            self.db.add(venda)
+            self.db.flush()
+
+            itens_venda = []
+            for produto_id, quantidade, preco_unitario in produtos:
+                item_venda = ItemVenda(id_venda=venda.id_venda, id_produto=produto_id, 
+                                    quantidade=quantidade, preco_unitario=preco_unitario)
+                self.db.add(item_venda)
+                itens_venda.append(item_venda)
+
             self.db.commit()
+            self.db.refresh(venda) 
 
-        return venda
-    
+            return venda
+
+        except QuantidadeInvalidaException:
+            self.db.rollback()
+            raise
+
+        except Exception as e:
+            self.db.rollback()
+
+            error_message = str(e)
+
+            # Detecta se o erro vem de uma restrição do banco (por exemplo, estoque insuficiente)
+            if "chk_quantidade_positiva_item_venda" in error_message:
+                raise QuantidadeInvalidaException("A quantidade do item deve ser maior que zero.")
+            elif "Estoque insuficiente" in error_message:  # Supondo que o banco tenha essa constraint
+                raise EstoqueInsuficienteException("Não há estoque suficiente para completar a venda.")
+            else:
+                raise ErroBancoException(f"Erro desconhecido ao registrar venda: {e}")
+
     def listar_vendas(self):
         """
         Retorna uma lista de todas as vendas do banco de dados.
