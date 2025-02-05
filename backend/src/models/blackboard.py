@@ -165,20 +165,31 @@ class Blackboard:
     # Operações no Estoque
     def adicionar_estoque(self, loja_id: int, produto_id: int, quantidade: int):
         """
-        Adiciona um novo item de estoque ao banco de dados.
+        Adiciona ou atualiza um item de estoque no banco de dados.
         Args:
             loja_id (int): O ID da loja.
             produto_id (int): O ID do produto.
             quantidade (int): A quantidade a ser adicionada ao estoque.
         Returns:
-            Estoque: O objeto de estoque adicionado.
+            Estoque: O objeto de estoque adicionado ou atualizado.
         """
-        
-        estoque = Estoque(id_loja=loja_id, id_produto=produto_id, quantidade=quantidade)
-        self.db.add(estoque)
-        self.db.commit()
-        self.db.refresh(estoque)
-        return estoque
+        try:
+            estoque = self.db.query(Estoque).filter_by(id_loja=loja_id, id_produto=produto_id).first()
+
+            if estoque:
+                # Se existir, incrementa a quantidade
+                estoque.quantidade += quantidade
+            else:
+                # Se não existir, cria um novo registro
+                estoque = Estoque(id_loja=loja_id, id_produto=produto_id, quantidade=quantidade)
+                self.db.add(estoque)
+
+            self.db.commit()
+            self.db.refresh(estoque)
+            return estoque
+        except Exception as e:
+            self.db.rollback()
+            raise ErroBancoException(f"Erro ao adicionar ou atualizar estoque: {e}")
     
     def atualizar_estoque(self, loja_id: int, produto_id: int, quantidade: int):
         """
@@ -211,6 +222,20 @@ class Blackboard:
         
         return self.db.query(Estoque).filter(Estoque.id_loja == loja_id, Estoque.id_produto == produto_id).first()
     
+    def obter_estoque_por_loja(self, loja_id: int):
+        """
+        Obtém o estoque de todos os produtos em uma loja específica.
+        
+        Args:
+            loja_id (int): O ID da loja.
+        
+        Returns:
+            list: Uma lista de objetos Estoque representando o estoque de todos os produtos na loja.
+        """
+        estoque = self.db.query(Estoque).filter(Estoque.id_loja == loja_id).all()
+        
+        return estoque
+
     def listar_estoque_por_produto(self, produto_id: int):
         """
         Retorna o estoque de um produto em todas as lojas.

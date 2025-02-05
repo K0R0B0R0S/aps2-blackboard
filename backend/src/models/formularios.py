@@ -20,7 +20,7 @@ class ProdutoForm(Form):
     
 class EstoqueForm(Form):
     id_loja = IntegerField('*ID Loja', validators=[DataRequired()])
-    id_produto = IntegerField('*ID Produto', validators=[DataRequired()])
+    id_produto = SelectField('*ID Produto', validators=[DataRequired()])
     quantidade = IntegerField('*Quantidade', validators=[DataRequired()])
 
 class FornecedorForm(Form):

@@ -10,7 +10,7 @@ from src.models.models import Loja
 from src.specialists.LojaFactory import LojaFactory
 from src.specialists.GerenciadorDeEstoque import GerenciadorDeEstoque, EstrategiaConservadora, EstrategiaAgressiva, EstrategiaPersonalizada
 from src.models.blackboard import Blackboard
-from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm
+from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm, EstoqueForm
 from flask_socketio import SocketIO, emit
 from decimal import Decimal
 
@@ -126,6 +126,30 @@ def listar_vendas():
             flash("Ocorreu um erro inesperado. Tente novamente.", "danger")
 
     return render_template('controle_vendas.html', vendas=vendas_formatadas, form=form)
+
+@app.route('/estoque/<int:loja_id>', methods=['GET', 'POST'])
+def estoque(loja_id):
+    form = EstoqueForm(request.form)
+    estoque_da_loja = blackboard.obter_estoque_por_loja(loja_id)
+
+    form.id_loja = loja_id
+
+    form.id_produto.choices = [(-1, 'Selecione um produto')] + [
+        (produto.id_produto, produto.nome_produto) for produto in blackboard.listar_produtos()
+    ]
+
+    if request.method == 'POST' and form.validate:
+        loja_id = form.id_loja
+        produto_id = form.id_produto.data
+        quantidade = form.quantidade.data
+
+        try:
+            blackboard.adicionar_estoque(loja_id, produto_id, quantidade)
+            flash("Estoque adicionado com sucesso!", "success")
+        except Exception as e:
+            flash(f"Ocorreu um erro ao adicionar o estoque: {str(e)}", "danger")
+
+    return render_template('controle_estoque.html', estoque=estoque_da_loja, form=form)
 
 @app.route('/fornecedores', methods=['GET', 'POST'])
 def fornecedores():

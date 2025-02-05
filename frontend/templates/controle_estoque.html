@@ -1,0 +1,53 @@
+{% extends "layoutControle.html" %}
+
+{% block content %}
+
+
+    <div class="container">
+        <a href="/" class="btn-voltar">Voltar</a>
+        <header>
+            <h1>Gerenciamento de Estoque - Lojas CEFET</h1>
+        </header>
+
+        <!-- Tabela para exibir as lojas e seus produtos -->
+        <section class="first-section">
+            <h2>Gerenciamento de Estoque</h2>
+            <div id="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Loja</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in estoque %}
+                        <tr>
+                            <td>{{ item.loja.nome_loja }}</td>
+                            <td>{{ item.produto.nome_produto}}</td>
+                            <td>{{ item.quantidade }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </section>
+
+        <!-- Formulário para adicionar uma nova loja -->
+        <section class="sec-section">
+            <h2>Adicionar Estoque</h2>
+
+            {% include '_messages.html' %}
+            {% from "_formularioajuda.html" import render_field %}
+
+            <form method="post" enctype="multipart/form-data" class="btn-form">
+                {{ render_field(form.id_produto, class="form-control")}}
+                {{ render_field(form.quantidade, class="form-control")}}
+                <button type="submit" id="addEstoque" class="btn-primary">Adicionar Estoque</button>
+            </form>
+        </section>
+    </div>
+
+{% endblock content %}
