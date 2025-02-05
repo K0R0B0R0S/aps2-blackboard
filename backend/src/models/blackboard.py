@@ -272,10 +272,9 @@ class Blackboard:
 
             error_message = str(e)
 
-            # Detecta se o erro vem de uma restrição do banco (por exemplo, estoque insuficiente)
             if "chk_quantidade_positiva_item_venda" in error_message:
                 raise QuantidadeInvalidaException("A quantidade do item deve ser maior que zero.")
-            elif "Estoque insuficiente" in error_message:  # Supondo que o banco tenha essa constraint
+            elif "Estoque insuficiente" in error_message:
                 raise EstoqueInsuficienteException("Não há estoque suficiente para completar a venda.")
             else:
                 raise ErroBancoException(f"Erro desconhecido ao registrar venda: {e}")
