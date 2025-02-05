@@ -5,7 +5,7 @@
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="UWFqU73YBer2xQN_WlqB-1" value="Registrar Venda" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="40" y="40" width="770" height="500" as="geometry" />
+          <mxGeometry x="40" y="40" width="760" height="500" as="geometry" />
         </mxCell>
         <mxCell id="T-9nK4o-JUWZMKm0lX5K-0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="UWFqU73YBer2xQN_WlqB-1" source="UWFqU73YBer2xQN_WlqB-2" target="UWFqU73YBer2xQN_WlqB-6">
           <mxGeometry relative="1" as="geometry" />
@@ -17,7 +17,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="UWFqU73YBer2xQN_WlqB-3" value="Verifica estoque disponível" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" parent="UWFqU73YBer2xQN_WlqB-1" vertex="1">
-          <mxGeometry x="140" y="160" width="180" height="40" as="geometry" />
+          <mxGeometry x="140" y="150" width="180" height="40" as="geometry" />
         </mxCell>
         <mxCell id="T-9nK4o-JUWZMKm0lX5K-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="UWFqU73YBer2xQN_WlqB-1" source="UWFqU73YBer2xQN_WlqB-6" target="UWFqU73YBer2xQN_WlqB-3">
           <mxGeometry relative="1" as="geometry" />
@@ -65,6 +65,9 @@
         </mxCell>
         <mxCell id="T-9nK4o-JUWZMKm0lX5K-20" value="[Não Possui estoque]" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="UWFqU73YBer2xQN_WlqB-1">
           <mxGeometry x="70" y="252" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T-9nK4o-JUWZMKm0lX5K-22" value="Diagram Heading" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=160;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="40" y="600" width="760" height="520" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
