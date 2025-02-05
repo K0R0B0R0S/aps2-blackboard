@@ -18,16 +18,11 @@ darkMode.addEventListener('click', () => {
     darkMode.querySelector('span:nth-child(2)').classList.toggle('active');
 })
 
+document.addEventListener('DOMContentLoaded', function() {
+    const socket = io();
 
-Orders.forEach(order => {
-    const tr = document.createElement('tr');
-    const trContent = `
-        <td>${order.productName}</td>
-        <td>${order.productNumber}</td>
-        <td>${order.paymentStatus}</td>
-        <td class="${order.status === 'Declined' ? 'danger' : order.status === 'Pending' ? 'warning' : 'primary'}">${order.status}</td>
-        <td class="primary">Details</td>
-    `;
-    tr.innerHTML = trContent;
-    document.querySelector('table tbody').appendChild(tr);
-});
+    socket.on('estoque_alert', function(message) {
+        alert(`Alerta de Estoque Baixo!\nProduto: ${message.produto}\nLoja: ${message.loja}\nQuantidade Atual: ${message.quantidade_atual}\nEstoque Mínimo: ${message.estoque_minimo}`);
+    });
+    
+})

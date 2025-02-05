@@ -1,0 +1,66 @@
+{% extends "layoutControle.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <a href="/" class="btn-voltar">Voltar</a>
+        <header>
+            <h1>Controle de Estoque - Lojas de Varejo</h1>
+        </header>
+
+        <!-- Tabela para exibir os produtos faltantes -->
+        <section class="first-section">
+            <h2>Relatório Produtos Faltantes</h2>
+            <div id="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome do produto</th>
+                            <th>ID da Loja</th>
+                            <th>Quantidade Atual</th>
+                            <th>Estoque Mínimo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in alerta_estoque_minimo %}
+                        <tr>
+                            <td>{{ item.produto }}</td>
+                            <td>{{ item.loja }}</td>
+                            <td>{{ item.quantidade_atual }}</td>
+                            <td>{{ item.estoque_minimo }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tabela para sugestão de compra -->
+        <section class="first-section">
+            <h2>Relatório Sugestão de Reposição</h2>
+            <div id="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome do produto</th>
+                            <th>ID da Loja</th>
+                            <th>Quantidade Sugerida de Compra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in sugestao_reposicao %}
+                        <tr>
+                            <td>{{ item.produto }}</td>
+                            <td>{{ item.loja }}</td>
+                            <td>{{ item.quantidade_reposicao }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+    </div>
+
+{% endblock content %}
