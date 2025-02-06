@@ -59,6 +59,7 @@
                 <input type="hidden" name="produto_id" value="{{ form.produto_id.data }}">
 
                 <button type="submit" id="addProduto" class="btn-primary">Adicionar Produto</button>
+                <button type="" id="upProduto" class="btn-primary">Update Produto</button>
             </form>
         </section>
     </div>
@@ -126,9 +127,10 @@
                 });
             }
 
-            addprodutobutton = document.getElementById('addProduto')
+            addprodutobutton = document.getElementById('upProduto')
 
             addprodutobutton.addEventListener('click', function() {
+                event.preventDefault();
                 const produtoIdFieldValue = document.querySelector('input[name="produto_id"]').value;
                 const produtoNomeFieldValue = document.querySelector('input[name="nome_produto"]').value;
                 const produtoDescricaoFieldValue = document.querySelector('textarea[name="descricao"]').value;
@@ -139,7 +141,7 @@
                 console.log(produtoIdFieldValue, produtoNomeFieldValue, produtoDescricaoFieldValue, produtoPrecoUnitarioFieldValue, produtoEstoqueMinimoFieldValue);
 
                 if (produtoIdFieldValue) {
-                    const url = `/editar_produto/${produtoIdFieldValue}/${encodeURIComponent(produtoNomeFieldValue)}/${encodeURIComponent(produtoDescricaoFieldValue)}/${encodeURIComponent(produtoPrecoUnitarioFieldValue)}/${encodeURIComponent(produtoEstoqueMinimoFieldValue)}`;
+                    const url = `http://127.0.0.1:5000/editar_produto/${produtoIdFieldValue}/${encodeURIComponent(produtoNomeFieldValue)}/${encodeURIComponent(produtoDescricaoFieldValue)}/${encodeURIComponent(produtoPrecoUnitarioFieldValue)}/${encodeURIComponent(produtoEstoqueMinimoFieldValue)}`;
                     
                     console.log("URL gerada:", url);  // Imprime a URL gerada
 

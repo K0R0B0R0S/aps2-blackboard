@@ -57,7 +57,8 @@
                 
                 <input type="hidden" name="loja_id" value="{{ form.loja_id.data }}"> <!-- hidden input para editar a loja existente -->
 
-                <button type="submit" id="addLoja" class="btn btn-primary btn-sm">{{ button_text }}</button>
+                <button type="submit" id="addLoja" class="btn btn-primary btn-sm">Cadastrar Loja</button>
+                <button type="" id="upLoja" class="btn btn-primary btn-sm">Update Loja</button>
                  <!-- hidden input para editar a loja existente -->
             </form>
         </section>
@@ -120,9 +121,10 @@
             });
         }
 
-        addlojabutton = document.getElementById('addLoja')
+        addlojabutton = document.getElementById('upLoja')
 
         addlojabutton.addEventListener('click', function(){
+            event.preventDefault();
             const lojaIdField = document.querySelector('input[name="loja_id"]');
             const lojaIdFieldValue = document.querySelector('input[name="loja_id"]').value;
             const lojaNomeFieldValue = document.querySelector('input[name="nome_loja"]').value;
@@ -132,7 +134,7 @@
             // Verifica se o campo tem valor
             if (lojaIdField && lojaIdField.value) {
                 // Construa a URL com os parâmetros
-				fetch(`/editar_loja/${lojaIdFieldValue}/${encodeURIComponent(lojaNomeFieldValue)}/${encodeURIComponent(lojaEnderecoFieldValue)}/${encodeURIComponent(lojaTelefoneFieldValue)}`, {
+				fetch(`http://127.0.0.1:5000/editar_loja/${lojaIdFieldValue}/${encodeURIComponent(lojaNomeFieldValue)}/${encodeURIComponent(lojaEnderecoFieldValue)}/${encodeURIComponent(lojaTelefoneFieldValue)}`, {
                     method: 'POST'
                 })
 

@@ -60,6 +60,7 @@
                 <input type="hidden" name="fornecedor_id" value="{{ form.fornecedor_id.data }}"> <!-- hidden input para edição -->
 
                 <button type="submit" id="addFornecedor" class="btn btn-primary btn-sm">Cadastrar Fornecedor</button>
+                <button type="" id="upFornecedor" class="btn btn-primary btn-sm">Update Fornecedor</button>
             </form>
         </section>
     </div>
@@ -123,9 +124,10 @@
                 });
             }
 
-            addFornecedorButton = document.getElementById('addFornecedor')
+            addFornecedorButton = document.getElementById('upFornecedor')
 
             addFornecedorButton.addEventListener('click', function(){
+                event.preventDefault();
                 const fornecedorIdField = document.querySelector('input[name="fornecedor_id"]');
                 const fornecedorIdFieldValue = document.querySelector('input[name="fornecedor_id"]').value;
                 const fornecedorNomeFieldValue = document.querySelector('input[name="nome_fornecedor"]').value;
@@ -136,7 +138,7 @@
                 // Verifica se o campo tem valor
                 if (fornecedorIdField && fornecedorIdField.value) {
                     // Envia requisição para atualizar o fornecedor
-                    fetch(`/editar_fornecedor/${fornecedorIdFieldValue}/${encodeURIComponent(fornecedorNomeFieldValue)}/${encodeURIComponent(fornecedorCnpjFieldValue)}/${encodeURIComponent(fornecedorTelefoneFieldValue)}/${encodeURIComponent(fornecedorEnderecoFieldValue)}`, {
+                    fetch(`http://127.0.0.1:5000/editar_fornecedor/${fornecedorIdFieldValue}/${encodeURIComponent(fornecedorNomeFieldValue)}/${encodeURIComponent(fornecedorCnpjFieldValue)}/${encodeURIComponent(fornecedorTelefoneFieldValue)}/${encodeURIComponent(fornecedorEnderecoFieldValue)}`, {
                         method: 'POST'
                     })
                 } 

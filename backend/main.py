@@ -218,9 +218,10 @@ def editar_loja(loja_id, nome_loja, endereco, telefone):
 
     # Atualiza a loja no banco de dados ou no Blackboard
     blackboard.atualizar_loja(loja_id, nome_loja, endereco, telefone)
+    
 
     # Retorna uma resposta simples de sucesso ou redireciona, sem renderizar HTML
-    return '', 204  # Retorna um status 204 sem conteúdo (sucesso)
+    return redirect(url_for('listar_lojas')), 204  # Retorna um status 204 sem conteúdo (sucesso)
 
 @app.route('/editar_produto/<int:produto_id>/<string:nome_produto>/<string:descricao>/<float:preco_unitario>/<int:estoque_minimo>', methods=['POST'])
 def editar_produto(produto_id, nome_produto, descricao, preco_unitario, estoque_minimo):
@@ -228,7 +229,7 @@ def editar_produto(produto_id, nome_produto, descricao, preco_unitario, estoque_
     blackboard.atualizar_produto(produto_id, nome_produto, descricao, preco_unitario, estoque_minimo)
 
     # Retorna uma resposta simples de sucesso ou redireciona, sem renderizar HTML
-    return '', 204  # Retorna um status 204 sem conteúdo (sucesso)
+    return redirect(url_for('listar_produtos')), 204  # Retorna um status 204 sem conteúdo (sucesso)
 
 @app.route('/editar_fornecedor/<int:fornecedor_id>/<string:nome_fornecedor>/<string:cnpj>/<string:telefone>/<string:endereco>', methods=['POST'])
 def editar_fornecedor(fornecedor_id, nome_fornecedor, cnpj, telefone, endereco):
@@ -239,7 +240,7 @@ def editar_fornecedor(fornecedor_id, nome_fornecedor, cnpj, telefone, endereco):
     blackboard.atualizar_fornecedor(fornecedor_id, nome_fornecedor, cnpj, telefone, endereco)
 
     # Retorna uma resposta 204 indicando que a atualização foi feita com sucesso
-    return '', 204
+    return redirect(url_for('fornecedores')), 204
     
 
 @app.route('/ver_estoque_lojas', methods=['GET'])
