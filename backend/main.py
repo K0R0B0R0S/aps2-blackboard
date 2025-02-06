@@ -13,6 +13,7 @@ from src.models.blackboard import Blackboard
 from src.models.formularios import LojaForm, ProdutoForm, VendaForm, ItemVendaForm, FornecedorForm, EstoqueForm
 from flask_socketio import SocketIO, emit
 from decimal import Decimal
+import time
 
 # Criando o aplicativo Flask
 app = Flask(__name__,
@@ -56,6 +57,9 @@ def read_root():
 
 @app.route('/produtos', methods=['GET', 'POST', 'PUT'])
 def listar_produtos():
+    
+    time.sleep(0.02)
+
     produtos = blackboard.listar_produtos()  # Busca a lista de produtos
     form = ProdutoForm(request.form)
 
@@ -154,6 +158,8 @@ def estoque(loja_id):
 @app.route('/fornecedores', methods=['GET', 'POST'])
 def fornecedores():
 
+    time.sleep(0.02)
+
     form = FornecedorForm(request.form)
 
     fornecedores = blackboard.listar_fornecedores()  # Busca a lista de fornecedores
@@ -179,6 +185,8 @@ def listar_compras():
 
 @app.route('/lojas', defaults={'loja_id': None}, methods=['GET', 'POST'])
 def listar_lojas(loja_id):
+
+    time.sleep(0.02)
 
     lojas = blackboard.listar_lojas()  # Usando o método do Blackboard para buscar lojas
 
@@ -207,11 +215,32 @@ def listar_lojas(loja_id):
 
 @app.route('/editar_loja/<int:loja_id>/<string:nome_loja>/<string:endereco>/<string:telefone>', methods=['POST'])
 def editar_loja(loja_id, nome_loja, endereco, telefone):
+
     # Atualiza a loja no banco de dados ou no Blackboard
     blackboard.atualizar_loja(loja_id, nome_loja, endereco, telefone)
 
     # Retorna uma resposta simples de sucesso ou redireciona, sem renderizar HTML
     return '', 204  # Retorna um status 204 sem conteúdo (sucesso)
+
+@app.route('/editar_produto/<int:produto_id>/<string:nome_produto>/<string:descricao>/<float:preco_unitario>/<int:estoque_minimo>', methods=['POST'])
+def editar_produto(produto_id, nome_produto, descricao, preco_unitario, estoque_minimo):
+    # Atualiza a loja no banco de dados ou no Blackboard
+    blackboard.atualizar_produto(produto_id, nome_produto, descricao, preco_unitario, estoque_minimo)
+
+    # Retorna uma resposta simples de sucesso ou redireciona, sem renderizar HTML
+    return '', 204  # Retorna um status 204 sem conteúdo (sucesso)
+
+@app.route('/editar_fornecedor/<int:fornecedor_id>/<string:nome_fornecedor>/<string:cnpj>/<string:telefone>/<string:endereco>', methods=['POST'])
+def editar_fornecedor(fornecedor_id, nome_fornecedor, cnpj, telefone, endereco):
+    """
+    Atualiza os dados de um fornecedor no banco de dados ou no Blackboard.
+    """
+    # Chama o método do Blackboard para atualizar o fornecedor
+    blackboard.atualizar_fornecedor(fornecedor_id, nome_fornecedor, cnpj, telefone, endereco)
+
+    # Retorna uma resposta 204 indicando que a atualização foi feita com sucesso
+    return '', 204
+    
 
 @app.route('/ver_estoque_lojas', methods=['GET'])
 def ver_estoque_lojas():

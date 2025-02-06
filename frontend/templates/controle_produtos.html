@@ -19,15 +19,23 @@
                             <th>Descrição</th>
                             <th>Preço Unitário</th>
                             <th>Estoque Mínimo</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for produto in produtos %}
-                        <tr>
+                        <tr
+                            data-produto-id="{{ produto.id_produto }}"
+                            data-produto-nome="{{ produto.nome_produto }}"
+                            data-produto-descricao="{{ produto.descricao }}"
+                            data-produto-precounitario="{{ produto.preco_unitario }}"
+                            data-produto-estoqueminimo="{{ produto.estoque_minimo }}"
+                        >
                             <td>{{ produto.nome_produto }}</td>
                             <td>{{ produto.descricao }}</td>
                             <td>R$ {{ "%.2f"|format(produto.preco_unitario) }}</td>
                             <td>{{ produto.estoque_minimo }}</td>
+                            <td><button type="button" style="cursor: pointer;" class="btn btn-primary btn-sm select-produto">Selecionar</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -48,9 +56,114 @@
                 {{ render_field(form.preco_unitario, class="form-control", placeholder="Preço Unitário") }}
                 {{ render_field(form.estoque_minimo, class="form-control", placeholder="Estoque Mínimo") }}
 
+                <input type="hidden" name="produto_id" value="{{ form.produto_id.data }}">
+
                 <button type="submit" id="addProduto" class="btn-primary">Adicionar Produto</button>
             </form>
         </section>
     </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            addEventSelect()
+
+            function preencherFormulario(row) {
+                const produtoId = row.dataset.produtoId;
+                const produtoNome = row.dataset.produtoNome;
+                const produtoDescricao = row.dataset.produtoDescricao;
+                const produtoPrecoUnitario = row.dataset.produtoPrecounitario;
+                const produtoEstoqueMinimo = row.dataset.produtoEstoqueminimo;
+                
+                // Preenche os campos do formulário com os dados do processo e define '' antes de atribuir os valores
+                const produtoIdField = document.querySelector('[name="produto_id"]');
+                if (produtoIdField) {
+                    produtoIdField.value = '';
+                    produtoIdField.value = produtoId;
+                }
+
+                const produtoNomeField = document.querySelector('input[name="nome_produto"]');
+                if (produtoNomeField) {
+                    produtoNomeField.value = '';
+                    produtoNomeField.value = produtoNome;
+                }
+
+                const produtoDescricaoField = document.querySelector('textarea[name="descricao"]');
+                if (produtoDescricaoField) {
+                    produtoDescricaoField.value = '';
+                    produtoDescricaoField.value = produtoDescricao;
+                }
+
+                const produtoPrecoUnitarioField = document.querySelector('input[name="preco_unitario"]');
+                if (produtoPrecoUnitarioField) {
+                    produtoPrecoUnitarioField.value = '';
+                    produtoPrecoUnitarioField.value = produtoPrecoUnitario;
+                }
+
+                const produtoEstoqueMinimoField = document.querySelector('input[name="estoque_minimo"]');
+                if (produtoEstoqueMinimoField) {
+                    produtoEstoqueMinimoField.value = '';
+                    produtoEstoqueMinimoField.value = produtoEstoqueMinimo;
+                }
+
+                document.querySelector('button[type="submit"]').textContent = 'Atualizar Produto';
+
+            }
+
+            function addEventSelect(){
+
+                const produtoIdField = document.querySelector('[name="produto_id"]');
+                produtoIdField.value = '';
+
+                document.querySelectorAll('.select-produto').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const row = button.closest('tr');
+                        console.log("Selecionando produto:", row);
+                        preencherFormulario(row);
+                    
+                    });
+                });
+            }
+
+            addprodutobutton = document.getElementById('addProduto')
+
+            addprodutobutton.addEventListener('click', function() {
+                const produtoIdFieldValue = document.querySelector('input[name="produto_id"]').value;
+                const produtoNomeFieldValue = document.querySelector('input[name="nome_produto"]').value;
+                const produtoDescricaoFieldValue = document.querySelector('textarea[name="descricao"]').value;
+                const produtoPrecoUnitarioFieldValue = document.querySelector('input[name="preco_unitario"]').value;
+                const produtoEstoqueMinimoFieldValue = document.querySelector('input[name="estoque_minimo"]').value;
+
+                // Verifique os valores antes de construir a URL
+                console.log(produtoIdFieldValue, produtoNomeFieldValue, produtoDescricaoFieldValue, produtoPrecoUnitarioFieldValue, produtoEstoqueMinimoFieldValue);
+
+                if (produtoIdFieldValue) {
+                    const url = `/editar_produto/${produtoIdFieldValue}/${encodeURIComponent(produtoNomeFieldValue)}/${encodeURIComponent(produtoDescricaoFieldValue)}/${encodeURIComponent(produtoPrecoUnitarioFieldValue)}/${encodeURIComponent(produtoEstoqueMinimoFieldValue)}`;
+                    
+                    console.log("URL gerada:", url);  // Imprime a URL gerada
+
+                    fetch(url, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Produto atualizado com sucesso!');
+                        } else {
+                            console.log('Erro ao atualizar o produto.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro na requisição:', error);
+                    });
+                }
+            });
+
+
+
+        });
+
+
+    </script>
 
 {% endblock content %}

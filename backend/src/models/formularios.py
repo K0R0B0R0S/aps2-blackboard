@@ -13,6 +13,7 @@ class LojaForm(Form):
     tipo_loja = SelectField('Tipo de Loja', choices=[('', 'Selecione um tipo...'), ('LojaA', 'Loja A'), ('LojaB', 'Loja B')], validators=[DataRequired()])
 
 class ProdutoForm(Form):
+    produto_id = HiddenField()
     nome_produto = StringField('Nome do Produto', validators=[DataRequired()])
     descricao = TextAreaField('Descrição', validators=[DataRequired()])
     preco_unitario = DecimalField('Preço Unitário', validators=[DataRequired(), NumberRange(min=0)])
@@ -24,6 +25,7 @@ class EstoqueForm(Form):
     quantidade = IntegerField('*Quantidade', validators=[DataRequired()])
 
 class FornecedorForm(Form):
+    fornecedor_id = HiddenField()
     nome_fornecedor = StringField('*Nome do Fornecedor', validators=[DataRequired(), Length(max=100)])
     cnpj = StringField('*CNPJ', validators=[DataRequired(), Length(max=14)])
     telefone = StringField('*Telefone', validators=[DataRequired(), Length(max=15)])

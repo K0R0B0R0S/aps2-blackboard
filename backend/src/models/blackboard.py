@@ -386,3 +386,41 @@ class Blackboard:
         self.db.commit()
         self.db.refresh(novo_forncedor)
         return novo_forncedor
+    
+    def obter_fornecedor(self, fornecedor_id: int):
+        """
+        Obtém um produto do banco de dados.
+        Args:
+            produto_id (int): O ID do produto.
+        Returns:
+            Produto: O objeto de produto encontrado.
+        """
+        
+        return self.db.query(Fornecedor).filter(Fornecedor.id_fornecedor == fornecedor_id).first()
+
+    def atualizar_fornecedor(self, fornecedor_id: int, nome_fornecedor: str, cnpj: str, telefone:str, endereco:str):
+        """
+        Atualiza os dados de um fornecedor no banco de dados.
+
+        Args:
+            fornecedor_id (int): ID do fornecedor.
+            nome_fornecedor (str): Nome do fornecedor.
+            cnpj (str): CNPJ do fornecedor.
+            telefone (str): Telefone do fornecedor.
+            endereco (str): Endereço do fornecedor.
+
+        Returns:
+            Fornecedor: O fornecedor atualizado se bem-sucedido.
+            None: Se o fornecedor não for encontrado.
+        """
+        fornecedor: Fornecedor = self.obter_fornecedor(fornecedor_id)
+
+        if fornecedor:
+            fornecedor.nome_fornecedor = nome_fornecedor
+            fornecedor.cnpj = cnpj
+            fornecedor.telefone = telefone
+            fornecedor.endereco = endereco
+            self.db.commit()
+            self.db.refresh(fornecedor)
+            return fornecedor
+        return None
